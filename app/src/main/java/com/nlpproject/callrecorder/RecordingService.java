@@ -62,6 +62,8 @@ public class RecordingService extends Service {
         String datetime = new SimpleDateFormat("yy-MM-dd hh-mm-ss").format(new Date());
         String fileName = output_dir.getAbsolutePath() + "/record_" + datetime + ".mp4";
 
+        Log.i(LOG_TAG, "File name: " + fileName);
+
         recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setOutputFile(fileName);

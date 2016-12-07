@@ -3,23 +3,30 @@ package com.nlpproject.callrecorder;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.nlpproject.callrecorder.GoogleServices.GoogleCloudStorageSender;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST = 42;
 
     TextView txt;
+    Button btn_testGCS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txt = (TextView)findViewById(R.id.txt);
+        txt = (TextView) findViewById(R.id.txt);
 
         if (checkPermissions())
             txt.setText("Got permissions!");
@@ -27,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             txt.setText("Didn't get permissions. Requesting...");
 
             ActivityCompat.requestPermissions(this,
-                    new String[] {
+                    new String[]{
                             Manifest.permission.READ_PHONE_STATE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
                             Manifest.permission.RECORD_AUDIO
@@ -36,6 +43,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         startService(new Intent(this, RecordingService.class));
+
+
+        // test api wysyłania pliku
+        btn_testGCS = (Button) findViewById(R.id.testGoogleCloudStorage);
+        btn_testGCS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    GoogleCloudStorageSender gcss = new GoogleCloudStorageSender();
+                    gcss.uploadFile("/property_contexts");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private boolean checkPermissions() {
@@ -44,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         int permissionCheckStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int permissionCheckRecord = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
 
-        return  permissionCheckStorage == PackageManager.PERMISSION_GRANTED &&
+        return permissionCheckStorage == PackageManager.PERMISSION_GRANTED &&
                 permissionCheckPhone == PackageManager.PERMISSION_GRANTED &&
                 permissionCheckRecord == PackageManager.PERMISSION_GRANTED;
     }

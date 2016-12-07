@@ -23,7 +23,7 @@ public class RecordingService extends Service {
 
     private MediaRecorder recorder;
     private boolean recording;
-    private File output_dir;
+    public static File output_dir;
     private CallBroadcastReceiver call_receiver;
 
     @Override
@@ -31,7 +31,7 @@ public class RecordingService extends Service {
         recorder = new MediaRecorder();
         recording = false;
 
-        output_dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Call Recorder");
+        output_dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Call_Recorder");
 
         if (!output_dir.exists())
             output_dir.mkdirs();
@@ -58,16 +58,18 @@ public class RecordingService extends Service {
         super.onDestroy();
     }
 
+
     private void startRecording() {
         String datetime = new SimpleDateFormat("yy-MM-dd hh-mm-ss").format(new Date());
-        String fileName = output_dir.getAbsolutePath() + "/record_" + datetime + ".mp4";
+        String fileName = output_dir.getAbsolutePath() + "/record_" + datetime + ".3gp";
 
         Log.i(LOG_TAG, "File name: " + fileName);
-
+            // psotor - zmieniłem format i kodowanie na zgodne z GoogleCloudSpeech, to jest jedne z dwóch (lepsze jakościowo) pasujących tam, a oferowanych przez Android
         recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         recorder.setOutputFile(fileName);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
+        recorder.setAudioSamplingRate(16000);
 
         try {
             recorder.prepare();

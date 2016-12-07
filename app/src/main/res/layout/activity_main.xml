@@ -15,5 +15,12 @@
         android:layout_height="wrap_content"
         android:text="Hello World!"
         android:id="@+id/txt" />
+    <Button
+        android:text="Test GCS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/testGoogleCloudStorage"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -19,10 +19,6 @@ import java.util.Collections;
  *      (czy nie ma timeoutów czy czegoś) i wtedy przerobić na inicjalizacje przy każdym dostępie
  *
  * CredentialsHardcoded - zawiera JSON z kluczem autoryzującym aplikacje w GoogleCloud.
- *      Mam nadzieje, że GoogleCloud nie będzie wymagała osobnych kluczy dla każdego AndroidStudio buildującego aplikację
- *      (W czasie wyrabiania klucza chyba musiałem podać hashowy odcisk AndroidStudio)
- *      Wtedy trzeba będzie to zmienić w jakiś resource ciągnięty z pliku w czasie buildowania
- *          (Do momentu wcomitowania na jednym kompie i pulla na innym nie mam jak tego sprawdzić)
  */
 
 public class GoogleCloudContext {

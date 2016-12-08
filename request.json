@@ -1,0 +1,10 @@
+{
+  'config': {
+      'encoding':'AMR_WB',
+      'sampleRate': 16000,
+      'languageCode': 'pl-PL'
+  },
+  'audio': {
+      'uri':'gs://nlp-proj-1.appspot.com/test1.3gp'
+  }
+}

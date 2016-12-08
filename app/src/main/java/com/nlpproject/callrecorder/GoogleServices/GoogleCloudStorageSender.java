@@ -16,9 +16,8 @@ package com.nlpproject.callrecorder.GoogleServices;
  *    https://developers.google.com/resources/api-libraries/download/storage/v1/java
  */
 
-import android.os.AsyncTask;
-
 import com.google.api.client.http.InputStreamContent;
+import com.google.api.client.json.GenericJson;
 import com.google.api.services.storage.Storage;
 
 import java.io.File;
@@ -32,10 +31,10 @@ import java.net.URLConnection;
  *      Do szczęścia potrzebuje tylko ścieżki do pliku
  */
 
-public class GoogleCloudStorageSender {
+public class GoogleCloudStorageSender implements RequestAsyncOperationRequester {
 
     private Storage storageService;
-    private String bucketName = "nlp-proj-1.appspot.com";
+    private final String bucketName = "nlp-proj-1.appspot.com";
 
     public GoogleCloudStorageSender() {
 
@@ -59,27 +58,13 @@ public class GoogleCloudStorageSender {
         Storage.Objects.Insert insert = storageService.objects().insert(bucketName, null, content);
         insert.setName(uploadFile.getName());
 
-        UploadAsyncOperation uao = new UploadAsyncOperation(insert);
-        uao.execute();
+        RequestAsyncOperation rao = new RequestAsyncOperation(insert, this);
+        rao.execute();
     }
 
-    class UploadAsyncOperation extends AsyncTask<String, Boolean, Void> {
-
-        Storage.Objects.Insert insert;
-
-        public UploadAsyncOperation(Storage.Objects.Insert m_insert) {
-            insert = m_insert;
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            try {
-                insert.execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
+    @Override
+    public void performRequestAsyncOperationResponse(GenericJson response) {
+        // TODO: implementation
     }
 }
 

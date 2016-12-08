@@ -4,22 +4,29 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.nlpproject.callrecorder.GoogleServices.GoogleCloudRecognitionRequester;
 import com.nlpproject.callrecorder.GoogleServices.GoogleCloudStorageSender;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST = 42;
 
     TextView txt;
-    Button btn_testGCS;
+    Button btn_testGCStorage;
+    Button btn_testGCSpeech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +53,31 @@ public class MainActivity extends AppCompatActivity {
 
 
         // test api wysyłania pliku
-        btn_testGCS = (Button) findViewById(R.id.testGoogleCloudStorage);
-        btn_testGCS.setOnClickListener(new View.OnClickListener() {
+        btn_testGCStorage = (Button) findViewById(R.id.testGoogleCloudStorage);
+        btn_testGCStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+                    Random rand = new Random();
+                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Call_Recorder/"+Integer.toString(rand.nextInt())+".txt");
+                    FileWriter fw = new FileWriter(file);
+                    fw.write("Ala ma kota");
+                    fw.close();
+                    Log.d("MainActivity","file path: " + file.getAbsolutePath());
                     GoogleCloudStorageSender gcss = new GoogleCloudStorageSender();
-                    gcss.uploadFile("/property_contexts");
+                    gcss.uploadFile(file.getAbsolutePath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        btn_testGCSpeech = (Button)findViewById(R.id.testGoogleCloudSpeech);
+        btn_testGCSpeech.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GoogleCloudRecognitionRequester gcrr = new GoogleCloudRecognitionRequester();
+                gcrr.sendRecognitionRequest("test1.3gp");
             }
         });
     }

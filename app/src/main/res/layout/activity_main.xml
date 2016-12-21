@@ -16,7 +16,7 @@
         android:text="Hello World!"
         android:id="@+id/txt" />
     <Button
-        android:text="Test GCS"
+        android:text="Reflesh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/refleshContent"
@@ -33,6 +33,7 @@
         android:layout_above="@+id/refleshContent">
 
         <EditText
+            android:enabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"

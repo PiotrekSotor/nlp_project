@@ -33,7 +33,7 @@ public class RecordingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        recorder = new MediaRecorder();
+
         recording = false;
 
         output_dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Call_Recorder");
@@ -65,6 +65,7 @@ public class RecordingService extends Service {
 
 
     private void startRecording() {
+        recorder = new MediaRecorder();
         String datetime = new SimpleDateFormat("yy-MM-dd hh-mm-ss").format(new Date());
         fileName = "record_" + datetime + ".3gp";
         recordedFilePath = output_dir.getAbsolutePath() + "/" + fileName;

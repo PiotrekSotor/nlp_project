@@ -12,6 +12,9 @@ import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.nlpproject.callrecorder.GoogleServices.GoogleCloudRecognitionRequester;
+import com.nlpproject.callrecorder.GoogleServices.GoogleCloudStorageSender;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -25,6 +28,8 @@ public class RecordingService extends Service {
     private boolean recording;
     public static File output_dir;
     private CallBroadcastReceiver call_receiver;
+    private String recordedFilePath;
+    private String fileName;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -61,20 +66,22 @@ public class RecordingService extends Service {
 
     private void startRecording() {
         String datetime = new SimpleDateFormat("yy-MM-dd hh-mm-ss").format(new Date());
-        String fileName = output_dir.getAbsolutePath() + "/record_" + datetime + ".3gp";
+        fileName = "record_" + datetime + ".3gp";
+        recordedFilePath = output_dir.getAbsolutePath() + "/" + fileName;
 
-        Log.i(LOG_TAG, "File name: " + fileName);
-            // psotor - zmieniłem format i kodowanie na zgodne z GoogleCloudSpeech, to jest jedne z dwóch (lepsze jakościowo) pasujących tam, a oferowanych przez Android
+        Log.i(LOG_TAG, "File name: " + recordedFilePath);
+        // psotor - zmieniłem format i kodowanie na zgodne z GoogleCloudSpeech, to jest jedne z dwóch (lepsze jakościowo) pasujących tam, a oferowanych przez Android
         recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setOutputFile(fileName);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
-        recorder.setAudioSamplingRate(16000);
+        recorder.setOutputFile(recordedFilePath);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        recorder.setAudioSamplingRate(8000);
 
         try {
             recorder.prepare();
         } catch (IOException e) {
             // TODO Handle exception
+            e.printStackTrace();
         }
 
         recorder.start();
@@ -87,6 +94,12 @@ public class RecordingService extends Service {
         recorder.release();
         recorder = null;
         recording = false;
+        try {
+            new GoogleCloudStorageSender().uploadFile(recordedFilePath);
+            new GoogleCloudRecognitionRequester().sendRecognitionRequest(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     class CallBroadcastReceiver extends BroadcastReceiver {

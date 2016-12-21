@@ -21,7 +21,6 @@ public class RequestAsyncOperation extends AsyncTask<Void, Void, GenericJson> {
     private RequestAsyncOperationRequester requestAsyncOperationRequester = null;
 
     /**
-     *
      * @param m_request - request do wykonania
      * @param @Nullable m_requester - obiekt mający otrzymać response
      */
@@ -47,6 +46,7 @@ public class RequestAsyncOperation extends AsyncTask<Void, Void, GenericJson> {
 
     @Override
     protected void onPostExecute(GenericJson response) {
+        Log.e("Response class", response.getClass().toString());
         Log.e("Response", response.toString());
         if (requestAsyncOperationRequester != null){
             requestAsyncOperationRequester.performRequestAsyncOperationResponse(response);

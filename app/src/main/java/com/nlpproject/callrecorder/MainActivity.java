@@ -11,22 +11,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nlpproject.callrecorder.GoogleServices.GoogleCloudRecognitionRequester;
 import com.nlpproject.callrecorder.GoogleServices.GoogleCloudStorageSender;
+import com.nlpproject.callrecorder.ORMLiteTools.RecognitionTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.model.RecognitionTask;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST = 42;
 
     TextView txt;
-    Button btn_testGCStorage;
-    Button btn_testGCSpeech;
+    Button btn_refleshContent;
+    EditText et_refleshContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,33 +58,26 @@ public class MainActivity extends AppCompatActivity {
 
 
         // test api wysyłania pliku
-        btn_testGCStorage = (Button) findViewById(R.id.testGoogleCloudStorage);
-        btn_testGCStorage.setOnClickListener(new View.OnClickListener() {
+        btn_refleshContent = (Button) findViewById(R.id.refleshContent);
+        btn_refleshContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    Random rand = new Random();
-                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Call_Recorder/"+Integer.toString(rand.nextInt())+".txt");
-                    FileWriter fw = new FileWriter(file);
-                    fw.write("Ala ma kota");
-                    fw.close();
-                    Log.d("MainActivity","file path: " + file.getAbsolutePath());
-                    GoogleCloudStorageSender gcss = new GoogleCloudStorageSender();
-                    gcss.uploadFile(file.getAbsolutePath());
-                } catch (IOException e) {
+                    List<RecognitionTask> recognitionTasks = RecognitionTaskService.getSortedList();
+                    for (RecognitionTask task : recognitionTasks) {
+                        et_refleshContent.append(task.getTranscription().toString() + "\n\n");
+                    }
+
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            }
-        });
 
-        btn_testGCSpeech = (Button)findViewById(R.id.testGoogleCloudSpeech);
-        btn_testGCSpeech.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GoogleCloudRecognitionRequester gcrr = new GoogleCloudRecognitionRequester();
-                gcrr.sendRecognitionRequest("test1.3gp");
             }
         });
+        et_refleshContent = (EditText) findViewById(R.id.transcriptions);
+
+
+        RecognitionTaskService recognitionTaskService = new RecognitionTaskService(this.getApplicationContext());
     }
 
     private boolean checkPermissions() {

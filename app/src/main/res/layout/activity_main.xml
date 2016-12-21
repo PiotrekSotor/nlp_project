@@ -19,17 +19,31 @@
         android:text="Test GCS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/testGoogleCloudStorage"
+        android:id="@+id/refleshContent"
         android:layout_alignParentBottom="true"
         />
 
-    <Button
-        android:text="Test GCSpeech"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/testGoogleCloudStorage"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/testGoogleCloudSpeech" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/txt"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:layout_above="@+id/refleshContent">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/transcriptions"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/refleshContent" />
+
+    </ScrollView>
 
 </RelativeLayout>

@@ -8,8 +8,12 @@ import com.google.api.services.speech.v1beta1.model.AsyncRecognizeRequest;
 import com.google.api.services.speech.v1beta1.model.Operation;
 import com.google.api.services.speech.v1beta1.model.RecognitionAudio;
 import com.google.api.services.speech.v1beta1.model.RecognitionConfig;
+import com.nlpproject.callrecorder.ORMLiteTools.RecognitionTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.model.RecognitionTask;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +29,7 @@ import java.util.Map;
 public class GoogleCloudRecognitionRequester implements RequestAsyncOperationRequester {
 
     Speech speechService = null;
+    String fileName;
 
     public GoogleCloudRecognitionRequester() {
         GoogleCloudContext gcc = GoogleCloudContext.getInstance();
@@ -51,6 +56,7 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
         asyncRecognizeRequest.setAudio(recognitionAudio);
         asyncRecognizeRequest.setConfig(recognitionConfig);
 
+        this.fileName = fileName;
 
         try {
             Speech.SpeechOperations.Asyncrecognize operation = speechService.speech().asyncrecognize(asyncRecognizeRequest);
@@ -102,13 +108,33 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
 
         if (response instanceof Operation) {
             if (doesResponseContainResults(response)) {
-                Log.e("Recognition rest", getResultFromResponse(response));
-            } else {
+                String transcription = getResultFromResponse(response);
+                Log.e("Recognition rest", transcription);
                 try {
+//                    RecognitionTask recognitionTask = RecognitionTaskService.findRecognitionTaskById(Long.parseLong(((Operation) response).getName()));
+                    RecognitionTask recognitionTask = new RecognitionTask();
+                    recognitionTask.setId(Long.parseLong(((Operation) response).getName()));
+                    recognitionTask.setProgress(100);
+                    recognitionTask.setDone(true);
+                    recognitionTask.setTranscription(transcription);
+                    recognitionTask.setFilePath(fileName);
+                    RecognitionTaskService.createRecognitionTask(recognitionTask);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+//                    RecognitionTask recognitionTask = RecognitionTaskService.findRecognitionTaskById(Long.parseLong(((Operation) response).getName()));
+
+                    Thread.sleep(5000);
                     Speech.Operations.Get getResult = speechService.operations().get((String) response.get("name"));
                     RequestAsyncOperation rao = new RequestAsyncOperation(getResult, this);
                     rao.execute();
+
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }

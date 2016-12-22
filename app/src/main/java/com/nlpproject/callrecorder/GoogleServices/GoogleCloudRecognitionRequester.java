@@ -12,7 +12,6 @@ import com.nlpproject.callrecorder.ORMLiteTools.RecognitionTaskService;
 import com.nlpproject.callrecorder.ORMLiteTools.model.RecognitionTask;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;

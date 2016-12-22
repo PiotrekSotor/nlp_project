@@ -1,5 +1,6 @@
 package com.nlpproject.callrecorder.GoogleServices;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.api.client.json.GenericJson;
@@ -8,11 +9,11 @@ import com.google.api.services.speech.v1beta1.model.AsyncRecognizeRequest;
 import com.google.api.services.speech.v1beta1.model.Operation;
 import com.google.api.services.speech.v1beta1.model.RecognitionAudio;
 import com.google.api.services.speech.v1beta1.model.RecognitionConfig;
-import com.nlpproject.callrecorder.ORMLiteTools.RecognitionTaskService;
-import com.nlpproject.callrecorder.ORMLiteTools.model.RecognitionTask;
+import com.nlpproject.callrecorder.ORMLiteTools.ProcessingTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,6 @@ import java.util.Map;
  * <p>
  * GoogleCloudRecognitionRequester - wysyłanie żądania transkrypcji nagrania
  * <p>
- * Jeszcze IN PROGRESS
  */
 
 public class GoogleCloudRecognitionRequester implements RequestAsyncOperationRequester {
@@ -37,10 +37,22 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
 
 
     /**
-     * @param fileName - sama nazwa pliku. W GoogleCloudStorage wszystko będzie w jednym kubełku
+     * @param fileName - sama nazwa pliku
      */
-    public void sendRecognitionRequest(String fileName) {
+    public void sendRecognitionRequest(String fileName, final Long id) {
 
+        AsyncRecognizeRequest asyncRecognizeRequest = prepareAsyncRecognizeRequest(fileName);
+        try {
+            Speech.SpeechOperations.Asyncrecognize operation = speechService.speech().asyncrecognize(asyncRecognizeRequest);
+            RequestAsyncOperation rao = new RequestAsyncOperation(operation, this, id);
+            rao.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @NonNull
+    private AsyncRecognizeRequest prepareAsyncRecognizeRequest(String fileName) {
         String gcURI = "gs://nlp-proj-1.appspot.com/" + fileName;
 
         AsyncRecognizeRequest asyncRecognizeRequest = new AsyncRecognizeRequest();
@@ -54,38 +66,30 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
         recognitionConfig.setMaxAlternatives(1);
         asyncRecognizeRequest.setAudio(recognitionAudio);
         asyncRecognizeRequest.setConfig(recognitionConfig);
-
-        this.fileName = fileName;
-
-        try {
-            Speech.SpeechOperations.Asyncrecognize operation = speechService.speech().asyncrecognize(asyncRecognizeRequest);
-            RequestAsyncOperation rao = new RequestAsyncOperation(operation, this);
-            rao.execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return asyncRecognizeRequest;
     }
 
-    private boolean doesResponseContainResults(GenericJson response) {
+    private boolean isRecognitionDone(GenericJson response) {
         String result = null;
         if (response.get("done") != null) {
-            Map<String, Object> map = ((Operation) response).getResponse();
-            if (map.get("results") != null) {
-                List<Map<String, Object>> listResults = (List<Map<String, Object>>) map.get("results");
-                Map<String, Object> mapResults = listResults.get(0);
-                if (mapResults.get("alternatives") != null) {
-                    List<Map<String, Object>> alternatives = (List<Map<String, Object>>) mapResults.get("alternatives");
-                    if (!alternatives.isEmpty() && alternatives.get(0).get("transcript") != null) {
-                        return true;
-                    }
-                }
-            }
+            return (Boolean)response.get("done");
+//            Map<String, Object> map = ((Operation) response).getResponse();
+//            if (map.get("results") != null) {
+//                List<Map<String, Object>> listResults = (List<Map<String, Object>>) map.get("results");
+//                Map<String, Object> mapResults = listResults.get(0);
+//                if (mapResults.get("alternatives") != null) {
+//                    List<Map<String, Object>> alternatives = (List<Map<String, Object>>) mapResults.get("alternatives");
+//                    if (!alternatives.isEmpty() && alternatives.get(0).get("transcript") != null) {
+//                        return true;
+//                    }
+//                }
+//            }
         }
         return false;
     }
 
     private String getResultFromResponse(GenericJson response) {
-        String result = null;
+        String result = "";
         if (response.get("done") != null) {
             Map<String, Object> map = ((Operation) response).getResponse();
             if (map.get("results") != null) {
@@ -103,40 +107,51 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
     }
 
     @Override
-    public void performRequestAsyncOperationResponse(GenericJson response) {
+    public void performRequestAsyncOperationResponse(GenericJson response, Long id) {
 
         if (response instanceof Operation) {
-            if (doesResponseContainResults(response)) {
+            if (isRecognitionDone(response)) {
                 String transcription = getResultFromResponse(response);
                 Log.e("Recognition rest", transcription);
-                try {
-//                    RecognitionTask recognitionTask = RecognitionTaskService.findRecognitionTaskById(Long.parseLong(((Operation) response).getName()));
-                    RecognitionTask recognitionTask = new RecognitionTask();
-                    recognitionTask.setId(Long.parseLong(((Operation) response).getName()));
-                    recognitionTask.setProgress(100);
-                    recognitionTask.setDone(true);
-                    recognitionTask.setTranscription(transcription);
-                    recognitionTask.setFilePath(fileName);
-                    RecognitionTaskService.createRecognitionTask(recognitionTask);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                processingTaskUpdateRecognitionResults(id, transcription);
             }
             else {
                 try {
-//                    RecognitionTask recognitionTask = RecognitionTaskService.findRecognitionTaskById(Long.parseLong(((Operation) response).getName()));
+                    processingTaskUpdateRecognitionProgress((Operation) response, id);
 
                     Thread.sleep(5000);
                     Speech.Operations.Get getResult = speechService.operations().get((String) response.get("name"));
-                    RequestAsyncOperation rao = new RequestAsyncOperation(getResult, this);
+                    RequestAsyncOperation rao = new RequestAsyncOperation(getResult, this, id);
                     rao.execute();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    private void processingTaskUpdateRecognitionProgress(Operation response, Long id) {
+        ProcessingTask task = ProcessingTaskService.findProcessingTaskById(id);
+        if (task != null){
+            task.setGoogleCloudRecognitionTaskId(response.getName());
+            if (response.getMetadata() != null){
+                Map<String, Object> metadata = response.getMetadata();
+                Integer progressPercent= (Integer)metadata.get("progress_percent");
+                task.setRecognitionProgress(progressPercent);
+            }
+            ProcessingTaskService.updateProcessingTask(task);
+        }
+    }
+
+    private void processingTaskUpdateRecognitionResults(Long id, String transcription) {
+        ProcessingTask processingTask = ProcessingTaskService.findProcessingTaskById(id);
+        if (processingTask != null) {
+            processingTask.setRecognitionProgress(100);
+            processingTask.setDone(true);
+            processingTask.setTranscription(transcription);
+            processingTask.setRecognizedDate(new Date());
+            ProcessingTaskService.createRecognitionTask(processingTask);
         }
     }
 }

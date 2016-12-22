@@ -14,6 +14,8 @@ import android.util.Log;
 
 import com.nlpproject.callrecorder.GoogleServices.GoogleCloudRecognitionRequester;
 import com.nlpproject.callrecorder.GoogleServices.GoogleCloudStorageSender;
+import com.nlpproject.callrecorder.ORMLiteTools.ProcessingTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,7 @@ public class RecordingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        ProcessingTaskService.initProcessingTaskService(getApplicationContext());
 
         recording = false;
 
@@ -96,8 +99,11 @@ public class RecordingService extends Service {
         recorder = null;
         recording = false;
         try {
-            new GoogleCloudStorageSender().uploadFile(recordedFilePath);
-            new GoogleCloudRecognitionRequester().sendRecognitionRequest(fileName);
+            ProcessingTask newProcessingTask = new ProcessingTask();
+            newProcessingTask.setRecordDate(new Date());
+            Long id = ProcessingTaskService.createRecognitionTask(newProcessingTask);
+            new GoogleCloudStorageSender().uploadFile(recordedFilePath, id);
+            new GoogleCloudRecognitionRequester().sendRecognitionRequest(fileName, id);
         } catch (IOException e) {
             e.printStackTrace();
         }

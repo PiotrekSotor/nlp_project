@@ -8,11 +8,14 @@ import java.util.Date;
 /**
  * Created by Piotrek on 21.12.2016.
  */
-@DatabaseTable(tableName = "recognition_task")
-public class RecognitionTask implements Comparable {
+@DatabaseTable(tableName = "processing_task")
+public class ProcessingTask implements Comparable {
 
-    @DatabaseField
+    public static final String GOOGLE_CLOUD_TASK_ID_FIELD_NAME = "google_cloud_recognition_task_id";
+    @DatabaseField(generatedId = true)
     private Long id;
+    @DatabaseField
+    private String google_cloud_recognition_task_id;
     @DatabaseField
     private String transcription;
     @DatabaseField
@@ -22,9 +25,11 @@ public class RecognitionTask implements Comparable {
     @DatabaseField
     private Date recognized_date;
     @DatabaseField
+    private Date upload_date;
+    @DatabaseField
     private Boolean done;
     @DatabaseField
-    private Integer progress;
+    private Integer recognition_progress;
 
 
     public Long getId() {
@@ -36,7 +41,7 @@ public class RecognitionTask implements Comparable {
     }
 
     public String getTranscription() {
-        return transcription;
+        return transcription==null ? "" : transcription;
     }
 
     public void setTranscription(String transcription) {
@@ -44,7 +49,7 @@ public class RecognitionTask implements Comparable {
     }
 
     public String getFilePath() {
-        return file_path;
+        return file_path == null ? "" : file_path;
     }
 
     public void setFilePath(String file_path) {
@@ -69,8 +74,10 @@ public class RecognitionTask implements Comparable {
 
     @Override
     public int compareTo(Object another) {
-        if (another instanceof RecognitionTask) {
-            if (this.getRecordDate().getTime() < ((RecognitionTask) another).getRecordDate().getTime()) {
+        if (another == null)
+            return 1;
+        if (another instanceof ProcessingTask) {
+            if (this.getRecordDate().getTime() < ((ProcessingTask) another).getRecordDate().getTime()) {
                 return 1;
             } else {
                 return -1;
@@ -91,11 +98,27 @@ public class RecognitionTask implements Comparable {
         this.done = done;
     }
 
-    public Integer getProgress() {
-        return progress;
+    public Integer getRecognitionProgress() {
+        return recognition_progress == null ? 0 : recognition_progress;
     }
 
-    public void setProgress(Integer progress) {
-        this.progress = progress;
+    public void setRecognitionProgress(Integer recognition_progress) {
+        this.recognition_progress = recognition_progress;
+    }
+
+    public Date getUploadDate() {
+        return upload_date;
+    }
+
+    public void setUploadDate(Date upload_date) {
+        this.upload_date = upload_date;
+    }
+
+    public String getGoogleCloudRecognitionTaskId() {
+        return google_cloud_recognition_task_id == null ? "" : google_cloud_recognition_task_id;
+    }
+
+    public void setGoogleCloudRecognitionTaskId(String google_cloud_recognition_task_id) {
+        this.google_cloud_recognition_task_id = google_cloud_recognition_task_id;
     }
 }

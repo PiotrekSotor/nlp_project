@@ -12,8 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.nlpproject.callrecorder.ORMLiteTools.RecognitionTaskService;
-import com.nlpproject.callrecorder.ORMLiteTools.model.RecognitionTask;
+import com.nlpproject.callrecorder.ORMLiteTools.ProcessingTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -49,29 +49,23 @@ public class MainActivity extends AppCompatActivity {
 
         startService(new Intent(this, RecordingService.class));
 
-
-        // test api wysyłania pliku
         btn_refreshContent = (Button) findViewById(R.id.refreshContent);
         btn_refreshContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    List<RecognitionTask> recognitionTasks = RecognitionTaskService.getSortedList();
+                List<ProcessingTask> processingTasks = ProcessingTaskService.getSortedList();
+                if (processingTasks != null)
+                {
                     et_refleshContent.setText("");
-                    for (RecognitionTask task : recognitionTasks) {
+                    for (ProcessingTask task : processingTasks) {
                         et_refleshContent.append(task.getTranscription().toString() + "\n\n");
                     }
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
 
             }
         });
         et_refleshContent = (EditText) findViewById(R.id.transcriptions);
-
-
-        RecognitionTaskService recognitionTaskService = new RecognitionTaskService(this.getApplicationContext());
+        ProcessingTaskService.initProcessingTaskService(getApplicationContext());
     }
 
     private boolean checkPermissions() {

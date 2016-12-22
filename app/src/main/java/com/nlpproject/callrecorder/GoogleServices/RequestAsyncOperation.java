@@ -19,14 +19,16 @@ public class RequestAsyncOperation extends AsyncTask<Void, Void, GenericJson> {
 
     private AbstractGoogleJsonClientRequest<GenericJson> request;
     private RequestAsyncOperationRequester requestAsyncOperationRequester = null;
+    private Long id = null;
 
     /**
      * @param m_request - request do wykonania
      * @param @Nullable m_requester - obiekt mający otrzymać response
      */
-    public RequestAsyncOperation(AbstractGoogleJsonClientRequest m_request, @Nullable RequestAsyncOperationRequester m_requester) {
+    public RequestAsyncOperation(AbstractGoogleJsonClientRequest m_request, @Nullable RequestAsyncOperationRequester m_requester, @Nullable Long m_id) {
         request = m_request;
         requestAsyncOperationRequester = m_requester;
+        id = m_id;
     }
 
     @Override
@@ -36,9 +38,9 @@ public class RequestAsyncOperation extends AsyncTask<Void, Void, GenericJson> {
         request.setDisableGZipContent(true);
         try {
             response = request.execute();
-        }catch (UnknownHostException e){
+        } catch (UnknownHostException e) {
             // no internet connection
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return response;
@@ -46,10 +48,12 @@ public class RequestAsyncOperation extends AsyncTask<Void, Void, GenericJson> {
 
     @Override
     protected void onPostExecute(GenericJson response) {
-        Log.e("Response class", response.getClass().toString());
-        Log.e("Response", response.toString());
-        if (requestAsyncOperationRequester != null){
-            requestAsyncOperationRequester.performRequestAsyncOperationResponse(response);
+        if (response != null) {
+            Log.e("Response class", response.getClass().toString());
+            Log.e("Response", response.toString());
+            if (requestAsyncOperationRequester != null) {
+                requestAsyncOperationRequester.performRequestAsyncOperationResponse(response, id);
+            }
         }
     }
 }

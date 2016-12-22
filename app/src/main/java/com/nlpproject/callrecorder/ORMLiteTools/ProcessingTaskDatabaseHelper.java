@@ -7,8 +7,8 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 import com.nlpproject.callrecorder.R;
-import com.nlpproject.callrecorder.ORMLiteTools.model.RecognitionTask;
 
 import java.sql.SQLException;
 
@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * Created by Piotrek on 21.12.2016.
  */
 
-public class RecognitionTaskDatabaseHelper extends OrmLiteSqliteOpenHelper {
+public class ProcessingTaskDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 
     private static final String DATABASE_NAME = "NLP_proj";
@@ -25,9 +25,9 @@ public class RecognitionTaskDatabaseHelper extends OrmLiteSqliteOpenHelper {
     /**
      * The data access object used to interact with the Sqlite database to do C.R.U.D operations.
      */
-    private Dao<RecognitionTask, Long> recognitionTasksDao;
+    private Dao<ProcessingTask, Long> recognitionTasksDao;
 
-    public RecognitionTaskDatabaseHelper(Context context) {
+    public ProcessingTaskDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION,
                 /**
                  * R.raw.ormlite_config is a reference to the ormlite_config.txt file in the
@@ -39,7 +39,7 @@ public class RecognitionTaskDatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
-            TableUtils.createTable(connectionSource, RecognitionTask.class);
+            TableUtils.createTable(connectionSource, ProcessingTask.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,7 +49,7 @@ public class RecognitionTaskDatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource,
                           int oldVersion, int newVersion) {
         try {
-            TableUtils.dropTable(connectionSource, RecognitionTask.class, false);
+            TableUtils.dropTable(connectionSource, ProcessingTask.class, false);
             onCreate(database, connectionSource);
 
         } catch (SQLException e) {
@@ -62,9 +62,9 @@ public class RecognitionTaskDatabaseHelper extends OrmLiteSqliteOpenHelper {
      * @return
      * @throws SQLException
      */
-    public Dao<RecognitionTask, Long> getDao() throws SQLException {
+    public Dao<ProcessingTask, Long> getDao() throws SQLException {
         if (recognitionTasksDao == null) {
-            recognitionTasksDao = getDao(RecognitionTask.class);
+            recognitionTasksDao = getDao(ProcessingTask.class);
         }
         return recognitionTasksDao;
     }

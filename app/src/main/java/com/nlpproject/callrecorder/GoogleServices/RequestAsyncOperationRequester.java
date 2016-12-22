@@ -7,5 +7,5 @@ import com.google.api.client.json.GenericJson;
  */
 
 public interface RequestAsyncOperationRequester {
-    void performRequestAsyncOperationResponse(GenericJson response);
+    void performRequestAsyncOperationResponse(GenericJson response, Long id);
 }

@@ -1,7 +1,7 @@
 package com.nlpproject.callrecorder.ORMLiteTools;
 
 import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
-import com.nlpproject.callrecorder.ORMLiteTools.model.RecognitionTask;
+import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -18,7 +18,7 @@ import java.sql.SQLException;
     /**
      * classes represents the models to use for generating the ormlite_config.txt file
      */
-    private static final Class<?>[] classes = new Class[] {RecognitionTask.class};
+    private static final Class<?>[] classes = new Class[] {ProcessingTask.class};
 
     /**
      * Given that this is a separate program from the android app, we have to use

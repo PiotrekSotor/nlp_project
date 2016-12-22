@@ -19,12 +19,15 @@ package com.nlpproject.callrecorder.GoogleServices;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.json.GenericJson;
 import com.google.api.services.storage.Storage;
+import com.nlpproject.callrecorder.ORMLiteTools.ProcessingTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.util.Date;
 
 /**
  *  GoogleCloudStorageSender - wysyłanie plików do GoogleCloudStorage
@@ -47,7 +50,7 @@ public class GoogleCloudStorageSender implements RequestAsyncOperationRequester 
      * @param filePath - ścieżka do pliku
      * @throws IOException - błędna ścieżka/nie można otworzyć pliku
      */
-    public void uploadFile(final String filePath) throws IOException {
+    public void uploadFile(final String filePath, final Long id) throws IOException {
 
         File uploadFile = new File(filePath);
         InputStream contentStream = new FileInputStream(uploadFile);
@@ -58,13 +61,33 @@ public class GoogleCloudStorageSender implements RequestAsyncOperationRequester 
         Storage.Objects.Insert insert = storageService.objects().insert(bucketName, null, content);
         insert.setName(uploadFile.getName());
 
-        RequestAsyncOperation rao = new RequestAsyncOperation(insert, this);
+        processingTaskUpdateFilePath(filePath, id);
+
+        RequestAsyncOperation rao = new RequestAsyncOperation(insert, this, id);
         rao.execute();
     }
 
     @Override
-    public void performRequestAsyncOperationResponse(GenericJson response) {
+    public void performRequestAsyncOperationResponse(GenericJson response, Long id) {
         // TODO: implementation
+        processingTaskUpdateUploadDate(id);
+    }
+
+
+    private void processingTaskUpdateUploadDate(Long id) {
+        ProcessingTask task = ProcessingTaskService.findProcessingTaskById(id);
+        if (task != null){
+            task.setUploadDate(new Date());
+            ProcessingTaskService.updateProcessingTask(task);
+        }
+    }
+
+    private void processingTaskUpdateFilePath(String filePath, Long id) {
+        ProcessingTask task = ProcessingTaskService.findProcessingTaskById(id);
+        if (task != null){
+            task.setFilePath(filePath);
+            ProcessingTaskService.updateProcessingTask(task);
+        }
     }
 }
 

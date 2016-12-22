@@ -151,7 +151,7 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
             processingTask.setDone(true);
             processingTask.setTranscription(transcription);
             processingTask.setRecognizedDate(new Date());
-            ProcessingTaskService.createRecognitionTask(processingTask);
+            ProcessingTaskService.updateProcessingTask(processingTask);
         }
     }
 }

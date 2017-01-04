@@ -10,6 +10,15 @@ android {
         versionName '0.1'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionCode 1
+
+        externalNativeBuild {
+            cmake {
+//                arguments "-DANDROID_ARM_NEON=TRUE", "-DANDROID_TOOLCHAIN=clang"
+//                arguments "-DANDROID_CPP_FEATURES=exceptions"
+                cppFlags "-fexceptions -frtti"
+            }
+        }
+
     }
     buildTypes {
         release {
@@ -18,6 +27,11 @@ android {
         }
     }
     productFlavors {
+    }
+    externalNativeBuild {
+        cmake {
+            path 'src/main/morfeusz_src/CMakeLists.txt'
+        }
     }
 }
 

@@ -12,10 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.nlpproject.callrecorder.ORMLiteTools.ProcessingTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.services.BaseService;
+import com.nlpproject.callrecorder.ORMLiteTools.services.ProcessingTaskService;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         et_refleshContent = (EditText) findViewById(R.id.transcriptions);
-        ProcessingTaskService.initProcessingTaskService(getApplicationContext());
+        BaseService.initProcessingTaskService(getApplicationContext());
     }
 
     private boolean checkPermissions() {

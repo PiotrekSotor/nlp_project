@@ -19,7 +19,7 @@ package com.nlpproject.callrecorder.GoogleServices;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.json.GenericJson;
 import com.google.api.services.storage.Storage;
-import com.nlpproject.callrecorder.ORMLiteTools.ProcessingTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.services.ProcessingTaskService;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.io.File;
@@ -75,18 +75,18 @@ public class GoogleCloudStorageSender implements RequestAsyncOperationRequester 
 
 
     private void processingTaskUpdateUploadDate(Long id) {
-        ProcessingTask task = ProcessingTaskService.findProcessingTaskById(id);
+        ProcessingTask task = ProcessingTaskService.find(id);
         if (task != null){
             task.setUploadDate(new Date());
-            ProcessingTaskService.updateProcessingTask(task);
+            ProcessingTaskService.update(task);
         }
     }
 
     private void processingTaskUpdateFilePath(String filePath, Long id) {
-        ProcessingTask task = ProcessingTaskService.findProcessingTaskById(id);
+        ProcessingTask task = ProcessingTaskService.find(id);
         if (task != null){
             task.setFilePath(filePath);
-            ProcessingTaskService.updateProcessingTask(task);
+            ProcessingTaskService.update(task);
         }
     }
 }

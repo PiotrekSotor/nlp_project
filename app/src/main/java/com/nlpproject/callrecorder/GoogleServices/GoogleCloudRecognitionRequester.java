@@ -9,7 +9,7 @@ import com.google.api.services.speech.v1beta1.model.AsyncRecognizeRequest;
 import com.google.api.services.speech.v1beta1.model.Operation;
 import com.google.api.services.speech.v1beta1.model.RecognitionAudio;
 import com.google.api.services.speech.v1beta1.model.RecognitionConfig;
-import com.nlpproject.callrecorder.ORMLiteTools.ProcessingTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.services.ProcessingTaskService;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.io.IOException;
@@ -132,7 +132,7 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
     }
 
     private void processingTaskUpdateRecognitionProgress(Operation response, Long id) {
-        ProcessingTask task = ProcessingTaskService.findProcessingTaskById(id);
+        ProcessingTask task = ProcessingTaskService.find(id);
         if (task != null){
             task.setGoogleCloudRecognitionTaskId(response.getName());
             if (response.getMetadata() != null){
@@ -140,18 +140,18 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
                 Integer progressPercent= (Integer)metadata.get("progress_percent");
                 task.setRecognitionProgress(progressPercent);
             }
-            ProcessingTaskService.updateProcessingTask(task);
+            ProcessingTaskService.update(task);
         }
     }
 
     private void processingTaskUpdateRecognitionResults(Long id, String transcription) {
-        ProcessingTask processingTask = ProcessingTaskService.findProcessingTaskById(id);
+        ProcessingTask processingTask = ProcessingTaskService.find(id);
         if (processingTask != null) {
             processingTask.setRecognitionProgress(100);
             processingTask.setDone(true);
             processingTask.setTranscription(transcription);
             processingTask.setRecognizedDate(new Date());
-            ProcessingTaskService.updateProcessingTask(processingTask);
+            ProcessingTaskService.update(processingTask);
         }
     }
 }

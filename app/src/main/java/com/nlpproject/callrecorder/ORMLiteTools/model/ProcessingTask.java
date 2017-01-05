@@ -9,11 +9,8 @@ import java.util.Date;
  * Created by Piotrek on 21.12.2016.
  */
 @DatabaseTable(tableName = "processing_task")
-public class ProcessingTask implements Comparable {
+public class ProcessingTask extends BaseModel implements Comparable {
 
-    public static final String GOOGLE_CLOUD_TASK_ID_FIELD_NAME = "google_cloud_recognition_task_id";
-    @DatabaseField(generatedId = true)
-    private Long id;
     @DatabaseField
     private String google_cloud_recognition_task_id;
     @DatabaseField
@@ -30,15 +27,6 @@ public class ProcessingTask implements Comparable {
     private Boolean done;
     @DatabaseField
     private Integer recognition_progress;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTranscription() {
         return transcription==null ? "" : transcription;

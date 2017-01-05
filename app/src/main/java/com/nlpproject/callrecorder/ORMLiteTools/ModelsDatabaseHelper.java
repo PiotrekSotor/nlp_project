@@ -10,7 +10,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
-import com.nlpproject.callrecorder.ORMLiteTools.model.Transcription;
+import com.nlpproject.callrecorder.ORMLiteTools.model.ResultOfAnalysis;
 import com.nlpproject.callrecorder.R;
 
 import java.sql.SQLException;
@@ -30,7 +30,7 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
      */
     private Dao<ProcessingTask, Long> processingTasksDao;
     private Dao<Keyword, Long> keywordDao;
-    private Dao<Transcription, Long> transcriptionDao;
+    private Dao<ResultOfAnalysis, Long> resultsOfAnalisisDao;
 
     static ModelsDatabaseHelper instance = null;
 
@@ -69,7 +69,7 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
             e.printStackTrace();
         }
         try {
-            TableUtils.createTable(connectionSource, Transcription.class);
+            TableUtils.createTable(connectionSource, ResultOfAnalysis.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,7 +85,7 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
             e.printStackTrace();
         }
         try {
-            TableUtils.dropTable(connectionSource, Transcription.class, false);
+            TableUtils.dropTable(connectionSource, ResultOfAnalysis.class, false);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -116,11 +116,11 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return keywordDao;
     }
-    public Dao<Transcription, Long> getTranscriptionDao() throws SQLException {
-        if (transcriptionDao == null) {
-            transcriptionDao = getDao(Transcription.class);
+    public Dao<ResultOfAnalysis, Long> getResultsOfAnalisisDao() throws SQLException {
+        if (resultsOfAnalisisDao == null) {
+            resultsOfAnalisisDao = getDao(ResultOfAnalysis.class);
         }
-        return transcriptionDao;
+        return resultsOfAnalisisDao;
     }
 
 }

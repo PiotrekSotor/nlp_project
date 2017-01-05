@@ -4,6 +4,8 @@ import com.j256.ormlite.dao.Dao;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
 
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Piotrek on 05.01.2017.
@@ -54,6 +56,20 @@ public class KeywordService extends BaseService{
             e.printStackTrace();
         }
         return id;
+    }
+
+    public static List<Keyword> getSortedList(){
+        List<Keyword> result = null;
+        Dao<Keyword,Long> dao = null;
+        try {
+            dao = modelsDatabaseHelper.getKeywordDao();
+            result = dao.queryForAll();
+            Collections.sort(result);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

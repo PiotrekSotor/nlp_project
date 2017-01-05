@@ -9,32 +9,16 @@ import com.j256.ormlite.table.DatabaseTable;
  * Created by Piotrek on 05.01.2017.
  */
 
-@DatabaseTable(tableName = "transcription")
-public class Transcription extends BaseModel{
-
-    @DatabaseField
-    private
-    String transcription;
+@DatabaseTable(tableName = "resutls_of_analysis")
+public class ResultOfAnalysis extends BaseModel{
 
     @ForeignCollectionField(eager = false)
     private
     ForeignCollection<Keyword> foundKeywords;
 
-    @DatabaseField
-    private
-    String pathToRecord;
-
     @DatabaseField(foreign = true)
     private
     ProcessingTask processingTask;
-
-    public String getTranscription() {
-        return transcription;
-    }
-
-    public void setTranscription(String transcription) {
-        this.transcription = transcription;
-    }
 
     public ForeignCollection<Keyword> getFoundKeywords() {
         return foundKeywords;
@@ -42,14 +26,6 @@ public class Transcription extends BaseModel{
 
     public void setFoundKeywords(ForeignCollection<Keyword> foundKeywords) {
         this.foundKeywords = foundKeywords;
-    }
-
-    public String getPathToRecord() {
-        return pathToRecord;
-    }
-
-    public void setPathToRecord(String pathToRecord) {
-        this.pathToRecord = pathToRecord;
     }
 
     public ProcessingTask getProcessingTask() {

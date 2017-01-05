@@ -70,7 +70,6 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
     }
 
     private boolean isRecognitionDone(GenericJson response) {
-        String result = null;
         if (response.get("done") != null) {
             return (Boolean)response.get("done");
 //            Map<String, Object> map = ((Operation) response).getResponse();

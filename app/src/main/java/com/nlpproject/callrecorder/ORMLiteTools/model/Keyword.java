@@ -21,9 +21,9 @@ public class Keyword extends BaseModel implements Comparable {
     private
     String baseWord;
 
-    @ForeignCollectionField(eager = false)
+    @ForeignCollectionField()
     private
-    ForeignCollection<Transcription>occurences;
+    ForeignCollection<ResultOfAnalysis>occurences;
 
 
     @Override
@@ -48,5 +48,13 @@ public class Keyword extends BaseModel implements Comparable {
 
     public void setBaseWord(String baseWord) {
         this.baseWord = baseWord;
+    }
+
+    public ForeignCollection<ResultOfAnalysis> getOccurences() {
+        return occurences;
+    }
+
+    public void setOccurences(ForeignCollection<ResultOfAnalysis> occurences) {
+        this.occurences = occurences;
     }
 }

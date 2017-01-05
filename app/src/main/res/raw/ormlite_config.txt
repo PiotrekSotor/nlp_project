@@ -13,7 +13,7 @@ generatedId=true
 fieldName=google_cloud_recognition_task_id
 # --field-end--
 # --field-start--
-fieldName=transcription
+fieldName=resultOfAnalysis
 # --field-end--
 # --field-start--
 fieldName=file_path

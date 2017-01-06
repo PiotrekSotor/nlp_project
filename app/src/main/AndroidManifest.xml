@@ -11,10 +11,13 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".KeywordDetailsActivity"/>
+        <activity android:name=".RecordDetailsActivity"/>
+        <activity android:name=".KeywordListActivity"/>
+        <activity android:name=".RecordListActivity"/>
 
         <service android:name=".RecordingService">
         </service>

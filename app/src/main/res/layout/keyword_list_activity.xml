@@ -44,7 +44,7 @@
         android:layout_alignParentStart="true">
 
         <LinearLayout
-            android:id="@+id/scrollViewInnerLayout"
+            android:id="@+id/keywordListActivity_scrollViewInnerLayout"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></LinearLayout>

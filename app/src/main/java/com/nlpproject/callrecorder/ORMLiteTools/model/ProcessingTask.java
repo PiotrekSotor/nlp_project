@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Piotrek on 21.12.2016.
  */
 @DatabaseTable(tableName = "processing_task")
-public class ProcessingTask extends BaseModel implements Comparable {
+public class ProcessingTask extends BaseModel{
 
     @DatabaseField
     private String transcription;
@@ -113,7 +113,4 @@ public class ProcessingTask extends BaseModel implements Comparable {
         this.caller_number = caller_number;
     }
 
-    public static List<ProcessingTask> getSortedList() {
-        return null;
-    }
 }

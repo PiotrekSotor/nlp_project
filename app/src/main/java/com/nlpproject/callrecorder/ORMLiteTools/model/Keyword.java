@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 
 @DatabaseTable(tableName = "keyword")
-public class Keyword extends BaseModel implements Comparable {
+public class Keyword extends BaseModel{
 
 
     @DatabaseField

@@ -6,13 +6,17 @@ import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword_X_ProcessingTask;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Piotrek on 05.01.2017.
  */
 
-public class Keyword_X_ProcessingTaskService extends BaseService {
+public class Keyword_X_ProcessingTaskService extends BaseService{
     public static Keyword_X_ProcessingTask findId(Long id) {
         Keyword_X_ProcessingTask result = null;
         Dao<Keyword_X_ProcessingTask, Long> dao = null;
@@ -25,15 +29,31 @@ public class Keyword_X_ProcessingTaskService extends BaseService {
         return result;
     }
 
-    public static List<Keyword> findByProcessingTask(ProcessingTask processingTask) {
-        List<Keyword> result = null;
-        // TODO: implement
+    public static List<Keyword_X_ProcessingTask> findByProcessingTask(ProcessingTask processingTask) {
+        List<Keyword_X_ProcessingTask>result =null;
+        Dao<Keyword_X_ProcessingTask, Long> dao = null;
+        try {
+            dao =modelsDatabaseHelper.getKeyword_X_ProcessingTaskDao();
+            result = dao.queryForEq("processingTask",processingTask);
+            Keyword_X_ProcessingTask.setSortType(Keyword_X_ProcessingTask.SORT_TYPE.SORT_MATCHES_DSC);
+            Collections.sort(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
-    public static List<ProcessingTask> findByKeyword(Keyword keyword) {
-        List<ProcessingTask> result = null;
-        // TODO: implement
+    public static List<Keyword_X_ProcessingTask> findByKeyword(Keyword keyword) {
+        List<Keyword_X_ProcessingTask>result =null;
+        Dao<Keyword_X_ProcessingTask, Long> dao = null;
+        try {
+            dao =modelsDatabaseHelper.getKeyword_X_ProcessingTaskDao();
+            result = dao.queryForEq("foundKeyword",keyword);
+            Keyword_X_ProcessingTask.setSortType(Keyword_X_ProcessingTask.SORT_TYPE.SORT_DATE_DSC);
+            Collections.sort(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
@@ -70,5 +90,4 @@ public class Keyword_X_ProcessingTaskService extends BaseService {
         }
         return id;
     }
-
 }

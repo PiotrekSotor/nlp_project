@@ -16,11 +16,20 @@
         android:text="Hello World!"
         android:id="@+id/txt" />
     <Button
-        android:text="Refresh"
+        android:text="Manage records"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/refreshContent"
+        android:id="@+id/btn_runRecordListActivity"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        />
+    <Button
+        android:text="Manage keywords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_runKeywordListActivity"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         />
 
     <ScrollView
@@ -30,7 +39,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="16dp"
-        android:layout_above="@+id/refreshContent">
+        android:layout_above="@+id/btn_runRecordListActivity">
 
         <EditText
             android:enabled="false"
@@ -43,7 +52,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_above="@+id/refreshContent" />
+            android:layout_above="@+id/btn_runRecordListActivity" />
 
     </ScrollView>
 

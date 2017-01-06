@@ -15,7 +15,7 @@ public abstract class BaseService {
      * @param context - may be null when you are sure that helper is already initialized
      */
 
-    public static void initProcessingTaskService(Context context){
+    public static void initServices(Context context){
         if (modelsDatabaseHelper == null){
             modelsDatabaseHelper = ModelsDatabaseHelper.getInstance(context);
         }

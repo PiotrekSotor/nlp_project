@@ -69,7 +69,6 @@ public class GoogleCloudStorageSender implements RequestAsyncOperationRequester 
 
     @Override
     public void performRequestAsyncOperationResponse(GenericJson response, Long id) {
-        // TODO: implementation
         processingTaskUpdateUploadDate(id);
     }
 

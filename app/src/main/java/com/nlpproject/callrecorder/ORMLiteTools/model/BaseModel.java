@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Piotrek on 05.01.2017.
  */
 
-public class BaseModel implements Serializable {
+public abstract class BaseModel implements Serializable, Comparable {
     @DatabaseField (generatedId = true)
     private
     Long id;

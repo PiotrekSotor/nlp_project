@@ -13,16 +13,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nlpproject.callrecorder.ORMLiteTools.services.BaseService;
-import com.nlpproject.callrecorder.ORMLiteTools.services.ProcessingTaskService;
-import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST = 42;
 
     TextView txt;
-    Button btn_refreshContent;
+    Button btn_recordListStartActivity;
+    Button btn_keywordListStartActivity;
     EditText et_refleshContent;
 
     @Override
@@ -49,23 +46,26 @@ public class MainActivity extends AppCompatActivity {
 
         startService(new Intent(this, RecordingService.class));
 
-        btn_refreshContent = (Button) findViewById(R.id.refreshContent);
-        btn_refreshContent.setOnClickListener(new View.OnClickListener() {
+        btn_recordListStartActivity = (Button) findViewById(R.id.btn_runRecordListActivity);
+        btn_recordListStartActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<ProcessingTask> processingTasks = ProcessingTaskService.getSortedList();
-                if (processingTasks != null)
-                {
-                    et_refleshContent.setText("");
-                    for (ProcessingTask task : processingTasks) {
-                        et_refleshContent.append(task.getTranscription().toString() + "\n\n");
-                    }
-                }
-
+                Intent intent = new Intent(MainActivity.this, RecordListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+        btn_keywordListStartActivity = (Button) findViewById(R.id.btn_runKeywordListActivity);
+        btn_keywordListStartActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, KeywordListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
         et_refleshContent = (EditText) findViewById(R.id.transcriptions);
-        BaseService.initProcessingTaskService(getApplicationContext());
+        BaseService.initServices(getApplicationContext());
     }
 
     private boolean checkPermissions() {

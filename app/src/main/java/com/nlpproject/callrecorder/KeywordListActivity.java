@@ -13,6 +13,8 @@ import com.nlpproject.callrecorder.ORMLiteTools.KeywordListButton;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
 import com.nlpproject.callrecorder.ORMLiteTools.services.KeywordService;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class KeywordListActivity extends AppCompatActivity implements View.OnClickListener{
@@ -26,10 +28,10 @@ public class KeywordListActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.keyword_list_activity);
 
-        btnNewKeyword = (Button) findViewById(R.id.btn_deleteRecord);
+        btnNewKeyword = (Button) findViewById(R.id.btn_addKeyword);
         btnNewKeyword.setOnClickListener(this);
         textViewNewKeyword = (TextView) findViewById(R.id.editText_newKeyword);
-        scrollViewLinearLayout = (LinearLayout) findViewById(R.id.RecordDetailsActivity_scrollViewInnerLayout);
+        scrollViewLinearLayout = (LinearLayout) findViewById(R.id.keywordListActivity_scrollViewInnerLayout);
 
         refreshScrollView();
     }
@@ -64,6 +66,11 @@ public class KeywordListActivity extends AppCompatActivity implements View.OnCli
     private void refreshScrollView(){
         List<Keyword> list = KeywordService.getSortedList();
         scrollViewLinearLayout.removeAllViews();
+        if (list == null || list.isEmpty()){
+            TextView message = new TextView(getApplicationContext());
+            message.setText("Empty keyword list");
+            scrollViewLinearLayout.addView(message);
+        }
         for (Keyword keyword : list){
             KeywordListButton newButton = new KeywordListButton(getApplicationContext());
             newButton.setRepresentedKeyword(keyword);

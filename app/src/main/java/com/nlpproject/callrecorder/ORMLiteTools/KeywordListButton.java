@@ -39,8 +39,9 @@ public class KeywordListButton extends Button  implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this.getContext(), RecordDetailsActivity.class);
+        Intent intent = new Intent(this.getContext(), KeywordDetailsActivity.class);
         intent.putExtra(KeywordDetailsActivity.SELECTED_KEYWORD, representedKeyword);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.getContext().startActivity(intent);
     }
 

@@ -9,8 +9,6 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.telecom.TelecomManager;
-import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -39,7 +37,7 @@ public class RecordingService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        BaseService.initProcessingTaskService(getApplicationContext());
+        BaseService.initServices(getApplicationContext());
 
         recording = false;
 

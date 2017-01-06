@@ -9,6 +9,8 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.telecom.TelecomManager;
+import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -23,7 +25,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class RecordingService extends Service {
+public class RecordingService extends Service{
     public static final String LOG_TAG = "CALL_RECORDER";
     private static final String ACTION_PHONE_STATE = "android.intent.action.PHONE_STATE";
 
@@ -33,6 +35,7 @@ public class RecordingService extends Service {
     private CallBroadcastReceiver call_receiver;
     private String recordedFilePath;
     private String fileName;
+    private String ringingNumber;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -102,6 +105,7 @@ public class RecordingService extends Service {
         try {
             ProcessingTask newProcessingTask = new ProcessingTask();
             newProcessingTask.setRecordDate(new Date());
+            newProcessingTask.setCaller_number(ringingNumber);
             Long id = ProcessingTaskService.create(newProcessingTask);
             new GoogleCloudStorageSender().uploadFile(recordedFilePath, id);
             new GoogleCloudRecognitionRequester().sendRecognitionRequest(fileName, id);
@@ -115,7 +119,10 @@ public class RecordingService extends Service {
         public void onReceive(Context context, Intent intent) {
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
-            if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
+            if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                ringingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+            }
+            else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                 if (!recording) {
                     startRecording();
                     Log.i(LOG_TAG, "Recording...");
@@ -123,6 +130,7 @@ public class RecordingService extends Service {
             } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                 if (recording) {
                     stopRecording();
+                    ringingNumber = null;
                     Log.i(LOG_TAG, "Stopped recording.");
                 }
             }

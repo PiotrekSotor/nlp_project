@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Piotrek on 21.12.2016.
@@ -27,6 +28,8 @@ public class ProcessingTask extends BaseModel implements Comparable {
     private Integer recognition_progress;
     @DatabaseField
     private String caller_number;
+    @DatabaseField
+    private Boolean analised_for_keywords;
 
     public String getTranscription() {
         return transcription==null ? "" : transcription;
@@ -108,5 +111,9 @@ public class ProcessingTask extends BaseModel implements Comparable {
 
     public void setCaller_number(String caller_number) {
         this.caller_number = caller_number;
+    }
+
+    public static List<ProcessingTask> getSortedList() {
+        return null;
     }
 }

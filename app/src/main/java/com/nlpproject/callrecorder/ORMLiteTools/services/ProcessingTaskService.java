@@ -1,6 +1,7 @@
 package com.nlpproject.callrecorder.ORMLiteTools.services;
 
 import com.j256.ormlite.dao.Dao;
+import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.sql.SQLException;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class ProcessingTaskService extends BaseService {
 
-    public static ProcessingTask find(Long id){
+    public static ProcessingTask find(Long id) {
         ProcessingTask result = null;
         Dao<ProcessingTask, Long> recognitionTaskLongDao = null;
         try {
@@ -24,8 +25,8 @@ public class ProcessingTaskService extends BaseService {
         return result;
     }
 
-        public static Boolean update(ProcessingTask processingTask) {
-        if (processingTask == null || processingTask.getId()==null){
+    public static Boolean update(ProcessingTask processingTask) {
+        if (processingTask == null || processingTask.getId() == null) {
             return false;
         }
         Boolean result = null;
@@ -40,12 +41,11 @@ public class ProcessingTaskService extends BaseService {
     }
 
     /**
-     *
      * @param processingTask
      * @return - id of persisted processingTask
      * @throws SQLException
      */
-    public static Long create(ProcessingTask processingTask){
+    public static Long create(ProcessingTask processingTask) {
         Dao<ProcessingTask, Long> recognitionTaskLongDao = null;
         Long id = null;
         try {
@@ -59,11 +59,23 @@ public class ProcessingTaskService extends BaseService {
     }
 
 
-    public static List<ProcessingTask> getSortedList(){
+    public static List<ProcessingTask> getSortedList() {
         List<ProcessingTask> result = null;
         try {
             Dao<ProcessingTask, Long> recognitionTaskLongDao = modelsDatabaseHelper.getProcessingTaskDao();
             result = recognitionTaskLongDao.queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static boolean delete(ProcessingTask processingTask) {
+        Dao<ProcessingTask, Long> dao = null;
+        boolean result = false;
+        try {
+            dao = modelsDatabaseHelper.getProcessingTaskDao();
+            result = dao.delete(processingTask) == 1;
         } catch (SQLException e) {
             e.printStackTrace();
         }

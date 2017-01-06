@@ -58,6 +58,18 @@ public class KeywordService extends BaseService{
         return id;
     }
 
+    public static boolean delete(Keyword keyword){
+        Dao<Keyword, Long> dao = null;
+        boolean result = false;
+        try {
+            dao = modelsDatabaseHelper.getKeywordDao();
+            result = dao.delete(keyword) == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static List<Keyword> getSortedList(){
         List<Keyword> result = null;
         Dao<Keyword,Long> dao = null;

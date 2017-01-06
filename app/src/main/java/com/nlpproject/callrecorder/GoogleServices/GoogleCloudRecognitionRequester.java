@@ -133,7 +133,6 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
     private void processingTaskUpdateRecognitionProgress(Operation response, Long id) {
         ProcessingTask task = ProcessingTaskService.find(id);
         if (task != null){
-            task.setGoogleCloudRecognitionTaskId(response.getName());
             if (response.getMetadata() != null){
                 Map<String, Object> metadata = response.getMetadata();
                 Integer progressPercent= (Integer)metadata.get("progress_percent");

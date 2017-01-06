@@ -5,10 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.nlpproject.callrecorder.ORMLiteTools.ScrollViewButton;
+import com.nlpproject.callrecorder.Morf.MorfeuszMock;
+import com.nlpproject.callrecorder.Morf.OwnMorfeusz;
+import com.nlpproject.callrecorder.ORMLiteTools.KeywordListButton;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
 import com.nlpproject.callrecorder.ORMLiteTools.services.KeywordService;
 
@@ -16,7 +17,6 @@ import java.util.List;
 
 public class KeywordListActivity extends AppCompatActivity implements View.OnClickListener{
 
-    ScrollView scrollView;
     TextView textViewNewKeyword;
     Button btnNewKeyword;
     LinearLayout scrollViewLinearLayout;
@@ -26,15 +26,19 @@ public class KeywordListActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.keyword_list_activity);
 
-//        scrollView = (ScrollView) findViewById(R.id.)
-        btnNewKeyword = (Button) findViewById(R.id.btn_addKeyword);
+        btnNewKeyword = (Button) findViewById(R.id.btn_deleteRecord);
         btnNewKeyword.setOnClickListener(this);
         textViewNewKeyword = (TextView) findViewById(R.id.editText_newKeyword);
-        scrollViewLinearLayout = (LinearLayout) findViewById(R.id.scrollViewInnerLayout);
+        scrollViewLinearLayout = (LinearLayout) findViewById(R.id.RecordDetailsActivity_scrollViewInnerLayout);
 
         refreshScrollView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshScrollView();
+    }
 
     @Override
     public void onClick(View v) {
@@ -44,18 +48,25 @@ public class KeywordListActivity extends AppCompatActivity implements View.OnCli
                 return;
             input = input.toLowerCase();
             addNewKeyword(input);
+            textViewNewKeyword.setText("");
+            refreshScrollView();
         }
     }
 
     private void addNewKeyword(String newKeyword) {
-
+        OwnMorfeusz morfeusz = new MorfeuszMock();
+        Keyword keyword = new Keyword();
+        keyword.setOriginalWord(newKeyword);
+        keyword.setBaseWord(morfeusz.getBase(newKeyword));
+        KeywordService.create(keyword);
     }
 
     private void refreshScrollView(){
         List<Keyword> list = KeywordService.getSortedList();
+        scrollViewLinearLayout.removeAllViews();
         for (Keyword keyword : list){
-            ScrollViewButton newButton = new ScrollViewButton(getApplicationContext());
-            newButton.setText(keyword.getOriginalWord());
+            KeywordListButton newButton = new KeywordListButton(getApplicationContext());
+            newButton.setRepresentedKeyword(keyword);
             scrollViewLinearLayout.addView(newButton);
         }
     }

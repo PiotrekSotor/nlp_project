@@ -1,8 +1,6 @@
 package com.nlpproject.callrecorder.ORMLiteTools.model;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
@@ -14,12 +12,15 @@ public class Keyword_X_ProcessingTask extends BaseModel{
 
     @DatabaseField (foreign = true)
     private
-    Keyword foundKeywords;
+    Keyword foundKeyword;
 
     @DatabaseField(foreign = true)
     private
     ProcessingTask processingTask;
 
+    @DatabaseField
+    private
+    Integer numberOfMatches;
 
     public ProcessingTask getProcessingTask() {
         return processingTask;
@@ -29,11 +30,19 @@ public class Keyword_X_ProcessingTask extends BaseModel{
         this.processingTask = processingTask;
     }
 
-    public Keyword getFoundKeywords() {
-        return foundKeywords;
+    public Keyword getFoundKeyword() {
+        return foundKeyword;
     }
 
-    public void setFoundKeywords(Keyword foundKeywords) {
-        this.foundKeywords = foundKeywords;
+    public void setFoundKeyword(Keyword foundKeyword) {
+        this.foundKeyword = foundKeyword;
+    }
+
+    public Integer getNumberOfMatches() {
+        return numberOfMatches;
+    }
+
+    public void setNumberOfMatches(Integer numberOfMatches) {
+        this.numberOfMatches = numberOfMatches;
     }
 }

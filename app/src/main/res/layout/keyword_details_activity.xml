@@ -1,50 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/keyword_list_activity"
+    android:id="@+id/keyword_details_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".KeywordListActivity">
+    tools:context=".KeywordDetailsActivity">
 
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text=""
+        android:text="[keywordhere]"
         android:textAlignment="center"
-        android:hint="enter new"
         android:textSize="25sp"
-        android:ems="15"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/editText_newKeyword" />
+        android:id="@+id/editText_keyword" />
 
     <Button
-        android:id="@+id/btn_addKeyword"
+        android:id="@+id/btn_deleteKeyword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editText_newKeyword"
+        android:layout_below="@id/editText_keyword"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:text="Add keyword" />
+        android:text="Delete" />
 
 
     <ScrollView
-        android:id="@+id/scrollView"
+        android:id="@+id/keywordDetailsActivity_scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btn_addKeyword"
+        android:layout_below="@+id/btn_deleteKeyword"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
         <LinearLayout
-            android:id="@+id/scrollViewInnerLayout"
+            android:id="@+id/KeywordDetailsActivity_scrollViewInnerLayout"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></LinearLayout>

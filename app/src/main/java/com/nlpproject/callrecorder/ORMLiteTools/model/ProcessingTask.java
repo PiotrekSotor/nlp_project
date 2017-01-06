@@ -12,8 +12,6 @@ import java.util.Date;
 public class ProcessingTask extends BaseModel implements Comparable {
 
     @DatabaseField
-    private String google_cloud_recognition_task_id;
-    @DatabaseField
     private String transcription;
     @DatabaseField
     private String file_path;
@@ -27,6 +25,8 @@ public class ProcessingTask extends BaseModel implements Comparable {
     private Boolean done;
     @DatabaseField
     private Integer recognition_progress;
+    @DatabaseField
+    private String caller_number;
 
     public String getTranscription() {
         return transcription==null ? "" : transcription;
@@ -102,11 +102,11 @@ public class ProcessingTask extends BaseModel implements Comparable {
         this.upload_date = upload_date;
     }
 
-    public String getGoogleCloudRecognitionTaskId() {
-        return google_cloud_recognition_task_id == null ? "" : google_cloud_recognition_task_id;
+    public String getCaller_number() {
+        return caller_number;
     }
 
-    public void setGoogleCloudRecognitionTaskId(String google_cloud_recognition_task_id) {
-        this.google_cloud_recognition_task_id = google_cloud_recognition_task_id;
+    public void setCaller_number(String caller_number) {
+        this.caller_number = caller_number;
     }
 }

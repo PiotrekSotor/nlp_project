@@ -3,7 +3,7 @@ package com.nlpproject.callrecorder.ORMLiteTools;
 import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
-import com.nlpproject.callrecorder.ORMLiteTools.model.ResultOfAnalysis;
+import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword_X_ProcessingTask;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,7 +23,7 @@ import java.sql.SQLException;
     private static final Class<?>[] classes = new Class[] {
             ProcessingTask.class,
             Keyword.class,
-            ResultOfAnalysis.class
+            Keyword_X_ProcessingTask.class
     };
 
     /**

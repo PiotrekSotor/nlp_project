@@ -21,10 +21,6 @@ public class Keyword extends BaseModel implements Comparable {
     private
     String baseWord;
 
-    @ForeignCollectionField()
-    private
-    ForeignCollection<ResultOfAnalysis>occurences;
-
 
     @Override
     public int compareTo(Object another) {
@@ -50,11 +46,4 @@ public class Keyword extends BaseModel implements Comparable {
         this.baseWord = baseWord;
     }
 
-    public ForeignCollection<ResultOfAnalysis> getOccurences() {
-        return occurences;
-    }
-
-    public void setOccurences(ForeignCollection<ResultOfAnalysis> occurences) {
-        this.occurences = occurences;
-    }
 }

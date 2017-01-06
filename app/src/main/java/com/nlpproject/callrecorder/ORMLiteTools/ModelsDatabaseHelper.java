@@ -10,7 +10,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
-import com.nlpproject.callrecorder.ORMLiteTools.model.ResultOfAnalysis;
+import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword_X_ProcessingTask;
 import com.nlpproject.callrecorder.R;
 
 import java.sql.SQLException;
@@ -30,7 +30,7 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
      */
     private Dao<ProcessingTask, Long> processingTasksDao;
     private Dao<Keyword, Long> keywordDao;
-    private Dao<ResultOfAnalysis, Long> resultsOfAnalisisDao;
+    private Dao<Keyword_X_ProcessingTask, Long> keyword_X_processingTaskDao;
 
     static ModelsDatabaseHelper instance = null;
 
@@ -47,7 +47,7 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
         return instance;
     }
 
-    private ModelsDatabaseHelper(Context context) {
+    public ModelsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION,
                 /**
                  * R.raw.ormlite_config is a reference to the ormlite_config.txt file in the
@@ -69,7 +69,7 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
             e.printStackTrace();
         }
         try {
-            TableUtils.createTable(connectionSource, ResultOfAnalysis.class);
+            TableUtils.createTable(connectionSource, Keyword_X_ProcessingTask.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,7 +85,7 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
             e.printStackTrace();
         }
         try {
-            TableUtils.dropTable(connectionSource, ResultOfAnalysis.class, false);
+            TableUtils.dropTable(connectionSource, Keyword_X_ProcessingTask.class, false);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -116,11 +116,11 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return keywordDao;
     }
-    public Dao<ResultOfAnalysis, Long> getResultsOfAnalisisDao() throws SQLException {
-        if (resultsOfAnalisisDao == null) {
-            resultsOfAnalisisDao = getDao(ResultOfAnalysis.class);
+    public Dao<Keyword_X_ProcessingTask, Long> getKeyword_X_ProcessingTaskDao() throws SQLException {
+        if (keyword_X_processingTaskDao == null) {
+            keyword_X_processingTaskDao = getDao(Keyword_X_ProcessingTask.class);
         }
-        return resultsOfAnalisisDao;
+        return keyword_X_processingTaskDao;
     }
 
 }

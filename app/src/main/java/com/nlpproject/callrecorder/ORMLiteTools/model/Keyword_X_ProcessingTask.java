@@ -9,24 +9,17 @@ import com.j256.ormlite.table.DatabaseTable;
  * Created by Piotrek on 05.01.2017.
  */
 
-@DatabaseTable(tableName = "resutls_of_analysis")
-public class ResultOfAnalysis extends BaseModel{
+@DatabaseTable(tableName = "keyword_x_processingTask")
+public class Keyword_X_ProcessingTask extends BaseModel{
 
-    @ForeignCollectionField(eager = false)
+    @DatabaseField (foreign = true)
     private
-    ForeignCollection<Keyword> foundKeywords;
+    Keyword foundKeywords;
 
     @DatabaseField(foreign = true)
     private
     ProcessingTask processingTask;
 
-    public ForeignCollection<Keyword> getFoundKeywords() {
-        return foundKeywords;
-    }
-
-    public void setFoundKeywords(ForeignCollection<Keyword> foundKeywords) {
-        this.foundKeywords = foundKeywords;
-    }
 
     public ProcessingTask getProcessingTask() {
         return processingTask;
@@ -34,5 +27,13 @@ public class ResultOfAnalysis extends BaseModel{
 
     public void setProcessingTask(ProcessingTask processingTask) {
         this.processingTask = processingTask;
+    }
+
+    public Keyword getFoundKeywords() {
+        return foundKeywords;
+    }
+
+    public void setFoundKeywords(Keyword foundKeywords) {
+        this.foundKeywords = foundKeywords;
     }
 }

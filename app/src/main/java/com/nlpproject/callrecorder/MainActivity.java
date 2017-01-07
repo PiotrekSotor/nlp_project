@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     TextView txt;
     Button btn_recordListStartActivity;
     Button btn_keywordListStartActivity;
-    EditText et_refleshContent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        et_refleshContent = (EditText) findViewById(R.id.transcriptions);
+
         BaseService.initServices(getApplicationContext());
     }
 

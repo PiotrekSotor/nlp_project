@@ -42,7 +42,7 @@ public class KeywordDetailsActivity extends AppCompatActivity implements View.On
         representedKeyword = (Keyword) intent.getSerializableExtra(SELECTED_KEYWORD);
         if (representedKeyword != null)
         {
-            textViewKeyword.setText(representedKeyword.getOriginalWord());
+            textViewKeyword.setText("Keyword:\n"+representedKeyword.getOriginalWord());
         }
 
         refreshScrollView();

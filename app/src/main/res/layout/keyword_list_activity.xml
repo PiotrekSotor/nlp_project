@@ -8,7 +8,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".KeywordListActivity">
+    tools:context=".KeywordListActivity"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true" >
 
 
     <EditText
@@ -23,7 +25,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/editText_newKeyword" />
+        android:id="@+id/editText_newKeyword"
+        />
 
     <Button
         android:id="@+id/btn_addKeyword"
@@ -34,12 +37,24 @@
         android:layout_alignParentStart="true"
         android:text="Add keyword" />
 
+    <TextView
+        android:text="List of keywords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_addKeyword"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textAlignment="center"
+        android:id="@+id/textView_listOfKeywords"
+        android:textSize="20sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="10sp"/>
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btn_addKeyword"
+        android:layout_below="@+id/textView_listOfKeywords"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 

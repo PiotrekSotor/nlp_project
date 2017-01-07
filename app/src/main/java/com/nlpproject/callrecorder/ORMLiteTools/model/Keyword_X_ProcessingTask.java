@@ -14,11 +14,11 @@ public class Keyword_X_ProcessingTask extends BaseModel{
     public final static String KEYWORD_FIELD_NAME = "foundKeyword_id";
     public final static String PROCESSING_TASK_FIELD_NAME = "processingTask_id";
 
-    @DatabaseField (foreign = true)
+    @DatabaseField (foreign = true, foreignAutoRefresh = true, maxForeignAutoRefreshLevel = 2)
     private
     Keyword foundKeyword;
 
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, maxForeignAutoRefreshLevel = 2)
     private
     ProcessingTask processingTask;
 

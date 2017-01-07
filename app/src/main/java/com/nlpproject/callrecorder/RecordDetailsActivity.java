@@ -1,6 +1,8 @@
 package com.nlpproject.callrecorder;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -142,17 +144,19 @@ public class RecordDetailsActivity extends AppCompatActivity implements View.OnC
         scrollViewLinearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
         if (list == null || list.isEmpty()) {
             TextView message = new TextView(getApplicationContext());
-            message.setText("Empty keyword list");
+            message.setText("No keywords found in trancription\n");
             scrollViewLinearLayout.addView(message);
         } else {
             StringBuffer sb = new StringBuffer();
             TextView keywords = new TextView(getApplicationContext());
+            sb.append("Found keywords:\n");
             for (Keyword_X_ProcessingTask keyword_x_processingTask : list) {
                 sb.append(String.format("(%s - %d)", keyword_x_processingTask.getFoundKeyword().getOriginalWord(), keyword_x_processingTask.getNumberOfMatches()));
             }
+            sb.append("\n");
             keywords.setText(sb.toString());
-            keywords.setTextColor(0xFF0000);
-            keywords.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            keywords.setTextColor(Color.parseColor("#ff0000"));
+            keywords.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
             scrollViewLinearLayout.addView(keywords);
 
 

@@ -77,7 +77,7 @@ public class ProcessingTaskService extends BaseService {
         Dao<ProcessingTask, Long> dao = null;
         try {
             dao =modelsDatabaseHelper.getProcessingTaskDao();
-            result = dao.queryForEq(ProcessingTask.ANALYSED_FOR_KEYWORDS_FIELD_NAME,true);
+            result = dao.queryForEq(ProcessingTask.ANALYSED_FOR_KEYWORDS_FIELD_NAME,false);
         } catch (SQLException e) {
             e.printStackTrace();
         }

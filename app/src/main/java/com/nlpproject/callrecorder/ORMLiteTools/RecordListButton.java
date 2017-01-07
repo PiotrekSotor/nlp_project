@@ -65,7 +65,6 @@ public class RecordListButton extends Button  implements View.OnClickListener{
         }
         sb.append("\n ");
         sb.append(DATA_FORMAT.format(representedRecord.getRecordDate()));
-//        String text = String.format("%s - %s", representedRecord.getCaller_number(), representedRecord.getRecordDate().toString());
         String text = sb.toString();
         this.setText(text);
     }

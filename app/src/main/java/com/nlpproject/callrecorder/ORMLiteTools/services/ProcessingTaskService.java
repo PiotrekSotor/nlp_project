@@ -66,6 +66,7 @@ public class ProcessingTaskService extends BaseService {
         try {
             Dao<ProcessingTask, Long> recognitionTaskLongDao = modelsDatabaseHelper.getProcessingTaskDao();
             result = recognitionTaskLongDao.queryForAll();
+            Collections.sort(result);
         } catch (SQLException e) {
             e.printStackTrace();
         }

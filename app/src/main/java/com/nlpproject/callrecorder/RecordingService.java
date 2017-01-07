@@ -8,7 +8,9 @@ import android.content.IntentFilter;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -26,6 +28,7 @@ import java.util.Date;
 public class RecordingService extends Service{
     public static final String LOG_TAG = "CALL_RECORDER";
     private static final String ACTION_PHONE_STATE = "android.intent.action.PHONE_STATE";
+    private static final String ACTION_OUTGOING_CALL = "android.intent.action.NEW_OUTGOING_CALL";
 
     private MediaRecorder recorder;
     private boolean recording;
@@ -48,6 +51,8 @@ public class RecordingService extends Service{
 
         final IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_PHONE_STATE);
+        filter.addAction(ACTION_OUTGOING_CALL);
+
         call_receiver = new CallBroadcastReceiver();
         registerReceiver(call_receiver, filter);
 
@@ -76,7 +81,6 @@ public class RecordingService extends Service{
         recordedFilePath = output_dir.getAbsolutePath() + "/" + fileName;
 
         Log.i(LOG_TAG, "File name: " + recordedFilePath);
-        // psotor - zmieniłem format i kodowanie na zgodne z GoogleCloudSpeech, to jest jedne z dwóch (lepsze jakościowo) pasujących tam, a oferowanych przez Android
         recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         recorder.setOutputFile(recordedFilePath);
@@ -117,7 +121,10 @@ public class RecordingService extends Service{
         public void onReceive(Context context, Intent intent) {
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
-            if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+            if (intent.getAction().equals(ACTION_OUTGOING_CALL)){
+                ringingNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
+            }
+            else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                 ringingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
             }
             else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
@@ -134,4 +141,9 @@ public class RecordingService extends Service{
             }
         }
     }
+//    class MyPhoneStateListener extends PhoneStateListener{
+//        public void onCallStateChanged(final int state, final String incomingNumber) {
+//            Log.e("")
+//        }
+//    }
 }

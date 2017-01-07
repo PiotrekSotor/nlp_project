@@ -13,6 +13,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Keyword extends BaseModel{
 
 
+    public static final String ORIGINAL_FIELD_NAME = "originalWord";
     @DatabaseField
     private
     String originalWord;

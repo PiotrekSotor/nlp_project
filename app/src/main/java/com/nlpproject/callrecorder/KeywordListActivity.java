@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nlpproject.callrecorder.Analyser.AnalyserMonitor;
 import com.nlpproject.callrecorder.Morf.MorfeuszMock;
@@ -50,6 +51,10 @@ public class KeywordListActivity extends AppCompatActivity implements View.OnCli
             if (input.isEmpty() || input.contains(" "))
                 return;
             input = input.toLowerCase();
+            if (!KeywordService.findByOriginal(input).isEmpty()){
+                Toast.makeText(this, "Keyword already exists",Toast.LENGTH_SHORT).show();
+                return;
+            }
             Keyword inserted = addNewKeyword(input);
             textViewNewKeyword.setText("");
             refreshScrollView();

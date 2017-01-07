@@ -2,6 +2,7 @@ package com.nlpproject.callrecorder.ORMLiteTools.services;
 
 import com.j256.ormlite.dao.Dao;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
+import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword_X_ProcessingTask;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -18,6 +19,18 @@ public class KeywordService extends BaseService{
         try {
             dao = modelsDatabaseHelper.getKeywordDao();
             result = dao.queryForId(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static List<Keyword> findByOriginal(String original) {
+        List<Keyword>result =null;
+        Dao<Keyword, Long> dao = null;
+        try {
+            dao =modelsDatabaseHelper.getKeywordDao();
+            result = dao.queryForEq(Keyword.ORIGINAL_FIELD_NAME,original);
         } catch (SQLException e) {
             e.printStackTrace();
         }

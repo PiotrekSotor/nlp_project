@@ -46,4 +46,8 @@ public class Keyword extends BaseModel{
         this.baseWord = baseWord;
     }
 
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }

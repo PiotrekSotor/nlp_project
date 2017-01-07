@@ -14,6 +14,7 @@ import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword_X_ProcessingTask;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 import com.nlpproject.callrecorder.ORMLiteTools.services.KeywordService;
 import com.nlpproject.callrecorder.ORMLiteTools.services.Keyword_X_ProcessingTaskService;
+import com.nlpproject.callrecorder.ORMLiteTools.services.ProcessingTaskService;
 
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,14 @@ public class KeywordDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void deleteKeyword() {
+
+        List<Keyword_X_ProcessingTask> list = Keyword_X_ProcessingTaskService.findByKeyword(representedKeyword);
+        if (list != null)
+        {
+            for (Keyword_X_ProcessingTask keyword_x_processingTask : list){
+                Keyword_X_ProcessingTaskService.delete(keyword_x_processingTask);
+            }
+        }
         if (KeywordService.delete(representedKeyword)){
             finish();
         }

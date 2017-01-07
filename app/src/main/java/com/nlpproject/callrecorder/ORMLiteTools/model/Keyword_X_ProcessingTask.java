@@ -11,6 +11,8 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Keyword_X_ProcessingTask extends BaseModel{
 
     private static SORT_TYPE sortType = SORT_TYPE.SORT_DATE_DSC;
+    public final static String KEYWORD_FIELD_NAME = "foundKeyword_id";
+    public final static String PROCESSING_TASK_FIELD_NAME = "processingTask_id";
 
     @DatabaseField (foreign = true)
     private
@@ -71,6 +73,12 @@ public class Keyword_X_ProcessingTask extends BaseModel{
         }
         return result;
     }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
+
     public enum SORT_TYPE{
         SORT_MATCHES_DSC,
         SORT_DATE_DSC

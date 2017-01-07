@@ -9,6 +9,7 @@ import com.google.api.services.speech.v1beta1.model.AsyncRecognizeRequest;
 import com.google.api.services.speech.v1beta1.model.Operation;
 import com.google.api.services.speech.v1beta1.model.RecognitionAudio;
 import com.google.api.services.speech.v1beta1.model.RecognitionConfig;
+import com.nlpproject.callrecorder.Analyser.AnalyserMonitor;
 import com.nlpproject.callrecorder.ORMLiteTools.services.ProcessingTaskService;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
@@ -72,17 +73,6 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
     private boolean isRecognitionDone(GenericJson response) {
         if (response.get("done") != null) {
             return (Boolean)response.get("done");
-//            Map<String, Object> map = ((Operation) response).getResponse();
-//            if (map.get("results") != null) {
-//                List<Map<String, Object>> listResults = (List<Map<String, Object>>) map.get("results");
-//                Map<String, Object> mapResults = listResults.get(0);
-//                if (mapResults.get("alternatives") != null) {
-//                    List<Map<String, Object>> alternatives = (List<Map<String, Object>>) mapResults.get("alternatives");
-//                    if (!alternatives.isEmpty() && alternatives.get(0).get("transcript") != null) {
-//                        return true;
-//                    }
-//                }
-//            }
         }
         return false;
     }
@@ -113,6 +103,7 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
                 String transcription = getResultFromResponse(response);
                 Log.e("Recognition rest", transcription);
                 processingTaskUpdateRecognitionResults(id, transcription);
+                AnalyserMonitor.getInstance().invokeAnalyse();
             }
             else {
                 try {

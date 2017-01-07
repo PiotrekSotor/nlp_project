@@ -9,5 +9,6 @@ import java.util.List;
 public interface OwnMorfeusz {
     public String getBase(String input);
     public List<String> getBase(List<String> inputList);
+    public List<String> getBase(String[] inputTab); // return  bases in lowercase
 
 }

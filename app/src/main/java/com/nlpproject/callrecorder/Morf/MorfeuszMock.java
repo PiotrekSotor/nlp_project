@@ -1,5 +1,8 @@
 package com.nlpproject.callrecorder.Morf;
 
+import com.google.api.client.util.Lists;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,5 +18,9 @@ public class MorfeuszMock implements OwnMorfeusz {
     @Override
     public List<String> getBase(List<String> inputList) {
         return inputList;
+    }
+    @Override
+    public List<String> getBase(String[] inputTab) {
+        return Arrays.asList(inputTab);
     }
 }

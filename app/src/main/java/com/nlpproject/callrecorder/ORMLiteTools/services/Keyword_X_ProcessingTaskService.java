@@ -1,6 +1,7 @@
 package com.nlpproject.callrecorder.ORMLiteTools.services;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword_X_ProcessingTask;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
@@ -34,7 +35,7 @@ public class Keyword_X_ProcessingTaskService extends BaseService{
         Dao<Keyword_X_ProcessingTask, Long> dao = null;
         try {
             dao =modelsDatabaseHelper.getKeyword_X_ProcessingTaskDao();
-            result = dao.queryForEq("processingTask",processingTask);
+            result = dao.queryForEq(Keyword_X_ProcessingTask.PROCESSING_TASK_FIELD_NAME,processingTask.getId());
             Keyword_X_ProcessingTask.setSortType(Keyword_X_ProcessingTask.SORT_TYPE.SORT_MATCHES_DSC);
             Collections.sort(result);
         } catch (SQLException e) {
@@ -48,7 +49,7 @@ public class Keyword_X_ProcessingTaskService extends BaseService{
         Dao<Keyword_X_ProcessingTask, Long> dao = null;
         try {
             dao =modelsDatabaseHelper.getKeyword_X_ProcessingTaskDao();
-            result = dao.queryForEq("foundKeyword",keyword);
+            result = dao.queryForEq(Keyword_X_ProcessingTask.KEYWORD_FIELD_NAME,keyword.getId());
             Keyword_X_ProcessingTask.setSortType(Keyword_X_ProcessingTask.SORT_TYPE.SORT_DATE_DSC);
             Collections.sort(result);
         } catch (SQLException e) {
@@ -57,6 +58,29 @@ public class Keyword_X_ProcessingTaskService extends BaseService{
         return result;
     }
 
+    public static boolean delete(Keyword_X_ProcessingTask keyword_x_processingTask){
+        Dao<Keyword_X_ProcessingTask, Long> dao = null;
+        boolean result = false;
+        try {
+            dao = modelsDatabaseHelper.getKeyword_X_ProcessingTaskDao();
+            result = dao.delete(keyword_x_processingTask) == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static boolean deleteAllContent(){
+        Dao<Keyword_X_ProcessingTask, Long> dao = null;
+        boolean result = false;
+        try {
+            dao = modelsDatabaseHelper.getKeyword_X_ProcessingTaskDao();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     public static Boolean update(Keyword_X_ProcessingTask keywordXProcessingTask) {
         if (keywordXProcessingTask == null || keywordXProcessingTask.getId() == null) {

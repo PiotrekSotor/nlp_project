@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nlpproject.callrecorder.Analyser.AnalyserMonitor;
 import com.nlpproject.callrecorder.Morf.MorfeuszMock;
 import com.nlpproject.callrecorder.Morf.OwnMorfeusz;
 import com.nlpproject.callrecorder.ORMLiteTools.KeywordListButton;
@@ -49,18 +50,22 @@ public class KeywordListActivity extends AppCompatActivity implements View.OnCli
             if (input.isEmpty() || input.contains(" "))
                 return;
             input = input.toLowerCase();
-            addNewKeyword(input);
+            Keyword inserted = addNewKeyword(input);
             textViewNewKeyword.setText("");
             refreshScrollView();
+
+            AnalyserMonitor.getInstance().invokeAnalyseForKeyword(inserted);
+
         }
     }
 
-    private void addNewKeyword(String newKeyword) {
+    private Keyword addNewKeyword(String newKeyword) {
         OwnMorfeusz morfeusz = new MorfeuszMock();
         Keyword keyword = new Keyword();
         keyword.setOriginalWord(newKeyword);
         keyword.setBaseWord(morfeusz.getBase(newKeyword));
-        KeywordService.create(keyword);
+        Long id = KeywordService.create(keyword);
+        return KeywordService.findId(id);
     }
 
     private void refreshScrollView(){

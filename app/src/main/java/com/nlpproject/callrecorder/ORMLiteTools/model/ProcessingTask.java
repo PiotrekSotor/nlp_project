@@ -12,6 +12,8 @@ import java.util.List;
 @DatabaseTable(tableName = "processing_task")
 public class ProcessingTask extends BaseModel{
 
+    public static final String ANALYSED_FOR_KEYWORDS_FIELD_NAME = "analysed_for_keywords";
+
     @DatabaseField
     private String transcription;
     @DatabaseField
@@ -29,7 +31,7 @@ public class ProcessingTask extends BaseModel{
     @DatabaseField
     private String caller_number;
     @DatabaseField
-    private Boolean analised_for_keywords;
+    private Boolean analysed_for_keywords;
 
     public String getTranscription() {
         return transcription==null ? "" : transcription;
@@ -106,11 +108,23 @@ public class ProcessingTask extends BaseModel{
     }
 
     public String getCaller_number() {
-        return caller_number;
+        return caller_number==null ? "" : caller_number;
     }
 
     public void setCaller_number(String caller_number) {
         this.caller_number = caller_number;
     }
 
+    public Boolean getAnalysed_for_keywords() {
+        return analysed_for_keywords;
+    }
+
+    public void setAnalysed_for_keywords(Boolean analysed_for_keywords) {
+        this.analysed_for_keywords = analysed_for_keywords;
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }

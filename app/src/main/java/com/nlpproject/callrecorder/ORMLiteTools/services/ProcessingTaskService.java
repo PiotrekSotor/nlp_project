@@ -2,9 +2,11 @@ package com.nlpproject.callrecorder.ORMLiteTools.services;
 
 import com.j256.ormlite.dao.Dao;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
+import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword_X_ProcessingTask;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -64,6 +66,18 @@ public class ProcessingTaskService extends BaseService {
         try {
             Dao<ProcessingTask, Long> recognitionTaskLongDao = modelsDatabaseHelper.getProcessingTaskDao();
             result = recognitionTaskLongDao.queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static List<ProcessingTask> findNotAnalysed() {
+        List<ProcessingTask>result =null;
+        Dao<ProcessingTask, Long> dao = null;
+        try {
+            dao =modelsDatabaseHelper.getProcessingTaskDao();
+            result = dao.queryForEq(ProcessingTask.ANALYSED_FOR_KEYWORDS_FIELD_NAME,true);
         } catch (SQLException e) {
             e.printStackTrace();
         }

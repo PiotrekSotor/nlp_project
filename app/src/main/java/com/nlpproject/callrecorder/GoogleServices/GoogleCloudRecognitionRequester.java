@@ -54,7 +54,7 @@ public class GoogleCloudRecognitionRequester implements RequestAsyncOperationReq
 
     @NonNull
     private AsyncRecognizeRequest prepareAsyncRecognizeRequest(String fileName) {
-        String gcURI = "gs://nlp-proj-1.appspot.com/" + fileName;
+        String gcURI = "gs://"+GoogleCloudStorageSender.bucketName+"/" + fileName;
 
         AsyncRecognizeRequest asyncRecognizeRequest = new AsyncRecognizeRequest();
         RecognitionAudio recognitionAudio = new RecognitionAudio();

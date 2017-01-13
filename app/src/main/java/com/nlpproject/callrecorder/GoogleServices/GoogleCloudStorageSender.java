@@ -37,7 +37,7 @@ import java.util.Date;
 public class GoogleCloudStorageSender implements RequestAsyncOperationRequester {
 
     private Storage storageService;
-    private final String bucketName = "nlp-proj-1.appspot.com";
+    public static final String bucketName = "nlp-proj";
 
     public GoogleCloudStorageSender() {
 

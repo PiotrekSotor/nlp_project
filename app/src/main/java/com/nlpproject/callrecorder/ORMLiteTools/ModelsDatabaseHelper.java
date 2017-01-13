@@ -9,6 +9,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
+import com.nlpproject.callrecorder.ORMLiteTools.model.KeywordBase;
 import com.nlpproject.callrecorder.ORMLiteTools.model.ProcessingTask;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword_X_ProcessingTask;
 import com.nlpproject.callrecorder.R;
@@ -31,7 +32,7 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<ProcessingTask, Long> processingTasksDao;
     private Dao<Keyword, Long> keywordDao;
     private Dao<Keyword_X_ProcessingTask, Long> keyword_X_processingTaskDao;
-
+    private Dao<KeywordBase, Long> keywordBaseDao;
     static ModelsDatabaseHelper instance = null;
 
     /**
@@ -60,6 +61,11 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource, ProcessingTask.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            TableUtils.createTable(connectionSource, KeywordBase.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -94,6 +100,11 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        try {
+            TableUtils.dropTable(connectionSource, KeywordBase.class, false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         onCreate(database, connectionSource);
     }
@@ -121,6 +132,12 @@ public class ModelsDatabaseHelper extends OrmLiteSqliteOpenHelper {
             keyword_X_processingTaskDao = getDao(Keyword_X_ProcessingTask.class);
         }
         return keyword_X_processingTaskDao;
+    }
+    public Dao<KeywordBase, Long> getKeywordBaseDao() throws SQLException {
+        if (keywordBaseDao == null) {
+            keywordBaseDao = getDao(KeywordBase.class);
+        }
+        return keywordBaseDao;
     }
 
 }

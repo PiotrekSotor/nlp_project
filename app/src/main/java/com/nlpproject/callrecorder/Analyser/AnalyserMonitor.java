@@ -1,6 +1,8 @@
 package com.nlpproject.callrecorder.Analyser;
 
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
+import com.nlpproject.callrecorder.ORMLiteTools.model.KeywordBase;
+import com.nlpproject.callrecorder.ORMLiteTools.services.KeywordBaseService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ public class AnalyserMonitor {
     private Boolean isRunning = false;
     private Boolean analyzeRequested = false;
     private Boolean analyzeForKeywordRequested = false;
-    protected List<Keyword> specificKeywordsToAnalyse = new ArrayList<>();
+    protected List<KeywordBase> specificKeywordsToAnalyse = new ArrayList<>();
     private static AnalyserMonitor instance= null;
 
     private AnalyserMonitor(){}
@@ -39,7 +41,8 @@ public class AnalyserMonitor {
     public void invokeAnalyseForKeyword(Keyword keyword){
         if (keyword != null){
             analyzeForKeywordRequested = true;
-            getSpecificKeywordsToAnalyse().add(keyword);
+            getSpecificKeywordsToAnalyse().addAll(
+                    KeywordBaseService.findByKeyword(keyword));
         }
         if (!isRunning){
             analyzeForKeywordRequested=false;
@@ -64,7 +67,7 @@ public class AnalyserMonitor {
         }
     }
 
-    protected List<Keyword> getSpecificKeywordsToAnalyse() {
+    protected List<KeywordBase> getSpecificKeywordsToAnalyse() {
         return specificKeywordsToAnalyse;
     }
 }

@@ -41,4 +41,6 @@ public class KeywordBase extends BaseModel {
     public void setBase(String base) {
         this.base = base;
     }
+
+    //todo: napisać equals dla stringa tak by sprawdzał z base
 }

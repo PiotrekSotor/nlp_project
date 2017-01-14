@@ -2,7 +2,7 @@ package com.nlpproject.callrecorder.ORMLiteTools.services;
 
 import com.j256.ormlite.dao.Dao;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
-import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword_X_ProcessingTask;
+import com.nlpproject.callrecorder.ORMLiteTools.model.KeywordBase;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -72,6 +72,10 @@ public class KeywordService extends BaseService{
     }
 
     public static boolean delete(Keyword keyword){
+        List<KeywordBase> relatedBases = KeywordBaseService.findByKeyword(keyword);
+        for (KeywordBase kb : relatedBases){
+            KeywordBaseService.delete(kb);
+        }
         Dao<Keyword, Long> dao = null;
         boolean result = false;
         try {

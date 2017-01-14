@@ -8,7 +8,7 @@ import com.j256.ormlite.field.DatabaseField;
 
 public class KeywordBase extends BaseModel {
 
-    public static final String KEYWORD_ID_FIELD_NAME = "originalWord";
+    public static final String KEYWORD_ID_FIELD_NAME = "keyword_id";
 
     @DatabaseField(foreign = true, foreignAutoRefresh = true, maxForeignAutoRefreshLevel = 2)
     private
@@ -42,5 +42,19 @@ public class KeywordBase extends BaseModel {
         this.base = base;
     }
 
-    //todo: napisać equals dla stringa tak by sprawdzał z base
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof String) {
+            return base.equals(o);
+        } else if (o instanceof KeywordBase) {
+            return base.equals(((KeywordBase) o).base) &&
+                    keyword.equals(((KeywordBase) o).getKeyword());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 17*keyword.hashCode() + 31*base.hashCode()+super.hashCode();
+    }
 }

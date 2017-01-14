@@ -1,8 +1,6 @@
 package com.nlpproject.callrecorder.ORMLiteTools.model;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
@@ -18,9 +16,6 @@ public class Keyword extends BaseModel{
     private
     String originalWord;
 
-    @DatabaseField
-    private
-    String baseWord;
 
 
     @Override
@@ -39,16 +34,8 @@ public class Keyword extends BaseModel{
         this.originalWord = originalWord;
     }
 
-    public String getBaseWord() {
-        return baseWord;
-    }
-
-    public void setBaseWord(String baseWord) {
-        this.baseWord = baseWord;
-    }
-
     @Override
     public int hashCode() {
-        return getId().hashCode();
+        return originalWord.hashCode()*17 + 11*super.hashCode();
     }
 }

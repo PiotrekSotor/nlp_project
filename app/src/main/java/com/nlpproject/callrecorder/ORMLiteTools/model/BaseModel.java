@@ -20,4 +20,9 @@ public abstract class BaseModel implements Serializable, Comparable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public int hashCode() {
+        return 101*id.hashCode();
+    }
 }

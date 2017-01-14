@@ -1,5 +1,6 @@
 package com.nlpproject.callrecorder;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,14 +10,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nlpproject.callrecorder.Analyser.AnalyserMonitor;
-import com.nlpproject.callrecorder.Morf.MorfeuszMock;
+import com.nlpproject.callrecorder.Morf.MorfeuszFactory;
 import com.nlpproject.callrecorder.Morf.OwnMorfeusz;
 import com.nlpproject.callrecorder.ORMLiteTools.KeywordListButton;
 import com.nlpproject.callrecorder.ORMLiteTools.model.Keyword;
+import com.nlpproject.callrecorder.ORMLiteTools.model.KeywordBase;
+import com.nlpproject.callrecorder.ORMLiteTools.services.KeywordBaseService;
 import com.nlpproject.callrecorder.ORMLiteTools.services.KeywordService;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class KeywordListActivity extends AppCompatActivity implements View.OnClickListener{
@@ -65,12 +66,17 @@ public class KeywordListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private Keyword addNewKeyword(String newKeyword) {
-        OwnMorfeusz morfeusz = new MorfeuszMock();
+        OwnMorfeusz morfeusz = MorfeuszFactory.getMorfeusz();
         Keyword keyword = new Keyword();
         keyword.setOriginalWord(newKeyword);
-        keyword.setBaseWord(morfeusz.getBase(newKeyword));
         Long id = KeywordService.create(keyword);
+        findBasesToKeyword(keyword);
         return KeywordService.findId(id);
+    }
+
+    private void findBasesToKeyword(Keyword keyword) {
+        GetBasesAsyncTask gbas = new GetBasesAsyncTask();
+        gbas.execute(keyword);
     }
 
     private void refreshScrollView(){
@@ -85,6 +91,24 @@ public class KeywordListActivity extends AppCompatActivity implements View.OnCli
             KeywordListButton newButton = new KeywordListButton(getApplicationContext());
             newButton.setRepresentedKeyword(keyword);
             scrollViewLinearLayout.addView(newButton);
+        }
+    }
+    class GetBasesAsyncTask extends AsyncTask<Keyword, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Keyword... params) {
+            OwnMorfeusz morfeusz = MorfeuszFactory.getMorfeusz();
+            List<String> bases = morfeusz.getBase(params[0].getOriginalWord());
+            if (bases != null) {
+                for (String base : bases) {
+                    KeywordBase keywordBase = new KeywordBase();
+                    keywordBase.setBase(base);
+                    KeywordBaseService.create(keywordBase);
+                    keywordBase.setKeyword(params[0]);
+                    KeywordBaseService.update(keywordBase);
+                }
+            }
+            return null;
         }
     }
 }

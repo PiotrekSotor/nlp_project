@@ -56,10 +56,11 @@ public class AnalyserAsyncTask extends AsyncTask<Void, Void, Void> {
 
                         for (Integer index : indexes) {
                             if (index != -1) {
+                                Keyword key = keywordsList.get(index).getKeyword();
                                 if (occurances.keySet().contains(keywordsList.get(index).getKeyword())) {
-                                    occurances.put(keywordsList.get(index).getKeyword(), occurances.get(keywordsList.get(index).getKeyword()) + 1);
+                                    occurances.put(key, occurances.get(key) + 1);
                                 } else {
-                                    occurances.put(keywordsList.get(index).getKeyword(), 1);
+                                    occurances.put(key, 1);
                                 }
                             }
                         }
@@ -80,12 +81,7 @@ public class AnalyserAsyncTask extends AsyncTask<Void, Void, Void> {
         }
 
         AnalyserMonitor.getInstance().
-
-                getSpecificKeywordsToAnalyse()
-
-                .
-
-                        clear();
+                getSpecificKeywordsToAnalyse().clear();
 
         return null;
     }

@@ -6,6 +6,6 @@ package com.nlpproject.callrecorder.Morf;
 
 public class MorfeuszFactory {
     public static OwnMorfeusz getMorfeusz(){
-        return new MorfeuszMock();
+        return new MorfeuszWebDemo();
     }
 }
